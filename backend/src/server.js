@@ -4,11 +4,13 @@ dotenv.config()
 import express from 'express'
 import pool from './database/db.js'
 import authRoutes from './routes/authRoutes.js'
+import plantRoutes from './routes/plantRoutes.js'
 
 const app = express()
 
 app.use(express.json())
 app.use('/api/auth', authRoutes)
+app.use('/api/plants', plantRoutes)
 
 app.use((err, req, res, next) => {
   res.status(500).json({ error: err.message })

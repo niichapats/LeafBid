@@ -2,7 +2,7 @@ import {
   createPlant as createPlantModel,
   getPlantById,
   getPlantsBySeller,
-  getPendingPlants,
+  getPendingPlants as getPendingPlantsModel,
   updatePlant as updatePlantModel,
   updatePlantStatus,
   deletePlant as deletePlantModel,
@@ -42,8 +42,8 @@ export async function deleteMyPlant(plantId, sellerId) {
   return result
 }
 
-export async function getPending() {
-  return getPendingPlants()
+export async function getPendingPlants() {
+  return getPendingPlantsModel()
 }
 
 export async function verifyPlant(plantId, status) {
