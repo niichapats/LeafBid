@@ -20,7 +20,7 @@ export async function register(email, password, role) {
   const user = await createUser(email, passwordHash, role)
 
   return jwt.sign(
-    { userId: user.id, role: user.role },
+    { userId: user.id, role: user.role, email: user.email },
     process.env.JWT_SECRET,
     { expiresIn: TOKEN_EXPIRES_IN }
   )
@@ -38,7 +38,7 @@ export async function login(email, password) {
   }
 
   return jwt.sign(
-    { userId: user.id, role: user.role },
+    { userId: user.id, role: user.role, email: user.email },
     process.env.JWT_SECRET,
     { expiresIn: TOKEN_EXPIRES_IN }
   )
