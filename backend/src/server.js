@@ -2,6 +2,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 import express from 'express'
+import cors from 'cors'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
 import pool from './database/db.js'
@@ -16,6 +17,7 @@ const io = new Server(httpServer, { cors: { origin: '*' } })
 
 initSocket(io)
 
+app.use(cors({ origin: 'http://localhost:5173', credentials: true }))
 app.use(express.json())
 app.use('/api/auth', authRoutes)
 app.use('/api/plants', plantRoutes)
