@@ -8,6 +8,7 @@ import AdminPlantsPage from './pages/AdminPlantsPage.jsx'
 import AdminAuctionsPage from './pages/AdminAuctionsPage.jsx'
 import AuctionsPage from './pages/AuctionsPage.jsx'
 import BiddingRoomPage from './pages/BiddingRoomPage.jsx'
+import ProfilePage from './pages/ProfilePage.jsx'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
         <Route path="/my-plants" element={<MyPlantsPage />} />
         <Route path="/create-auction" element={<CreateAuctionPage />} />
         <Route path="/admin/plants" element={<AdminPlantsPage />} />

@@ -19,3 +19,19 @@ export async function createUser(email, passwordHash, role) {
 
   return result.rows[0]
 }
+
+export async function getUserById(id) {
+  const result = await pool.query(
+    'SELECT id, email, role, display_name, phone, created_at FROM users WHERE id = $1',
+    [id]
+  )
+  return result.rows[0] || null
+}
+
+export async function updateUserProfile(id, displayName, phone) {
+  const result = await pool.query(
+    'UPDATE users SET display_name=$2, phone=$3 WHERE id=$1 RETURNING id, email, role, display_name, phone',
+    [id, displayName, phone]
+  )
+  return result.rows[0] || null
+}

@@ -9,6 +9,8 @@ import {
   updateAuctionStatus as updateAuctionStatusModel,
   deleteAuction as deleteAuctionModel,
   updateAuction as updateAuctionModel,
+  getWonAuctions as getWonAuctionsModel,
+  getAuctionWithWinner as getAuctionWithWinnerModel,
 } from '../models/auctionModel.js'
 
 export async function createAuction(sellerId, plantId, startPrice, startTime, endTime) {
@@ -104,4 +106,16 @@ export async function updateAuction(auctionId, sellerId, startPrice, startTime, 
 
 export async function updateAuctionStatus(auctionId, status) {
   return updateAuctionStatusModel(auctionId, status)
+}
+
+export async function getWonAuctions(buyerId) {
+  return getWonAuctionsModel(buyerId)
+}
+
+export async function getAuctionWithWinner(auctionId) {
+  const result = await getAuctionWithWinnerModel(auctionId)
+  if (!result) {
+    throw new Error('Auction not found')
+  }
+  return result
 }

@@ -9,6 +9,7 @@ import pool from './database/db.js'
 import authRoutes from './routes/authRoutes.js'
 import plantRoutes from './routes/plantRoutes.js'
 import auctionRoutes from './routes/auctionRoutes.js'
+import profileRoutes from './routes/profileRoutes.js'
 import initSocket from './socket/socketHandler.js'
 
 const app = express()
@@ -22,6 +23,7 @@ app.use(express.json())
 app.use('/api/auth', authRoutes)
 app.use('/api/plants', plantRoutes)
 app.use('/api/auctions', auctionRoutes)
+app.use('/api/profile', profileRoutes)
 
 app.use((err, req, res, next) => {
   res.status(500).json({ error: err.message })

@@ -31,6 +31,22 @@ export async function getAllAuctionsBySeller(sellerId) {
   return result.rows
 }
 
+export async function getWonAuctions(buyerId) {
+  const result = await pool.query(
+    "SELECT auctions.*, plants.title as plant_title, users.email as seller_email, users.display_name as seller_name, users.phone as seller_phone FROM auctions JOIN plants ON auctions.plant_id = plants.id JOIN users ON plants.seller_id = users.id WHERE auctions.winner_id = $1 AND auctions.status = 'ended' ORDER BY auctions.id DESC",
+    [buyerId]
+  )
+  return result.rows
+}
+
+export async function getAuctionWithWinner(auctionId) {
+  const result = await pool.query(
+    'SELECT auctions.*, plants.title as plant_title, winner.email as winner_email, winner.display_name as winner_display_name, winner.phone as winner_phone, seller.email as seller_email, seller.display_name as seller_display_name, seller.phone as seller_phone FROM auctions JOIN plants ON auctions.plant_id = plants.id LEFT JOIN users winner ON auctions.winner_id = winner.id JOIN users seller ON plants.seller_id = seller.id WHERE auctions.id = $1',
+    [auctionId]
+  )
+  return result.rows[0] || null
+}
+
 export async function placeBid(auctionId, buyerId, amount) {
   const client = await pool.connect()
   try {

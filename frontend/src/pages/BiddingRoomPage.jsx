@@ -9,10 +9,12 @@ function BiddingRoomPage() {
   const socketRef = useRef(null)
   const user = getUser()
   const [auction, setAuction] = useState(null)
+  const [winner, setWinner] = useState(null)
   const [bidHistory, setBidHistory] = useState([])
   const [amount, setAmount] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
+  const [loadingWinner, setLoadingWinner] = useState(false)
 
   const auctionId = useMemo(() => Number(id), [id])
 
@@ -27,6 +29,17 @@ function BiddingRoomPage() {
         setError('')
         const response = await api.get(`/auctions/${auctionId}`)
         setAuction(response.data)
+
+        try {
+          setLoadingWinner(true)
+          const winnerResponse = await api.get(`/auctions/${auctionId}/winner`)
+          setWinner(winnerResponse.data)
+        } catch (err) {
+          console.error('Failed to load winner info:', err)
+          setWinner(null)
+        } finally {
+          setLoadingWinner(false)
+        }
       } catch (err) {
         setError(err.response?.data?.error || 'Failed to load auction')
       } finally {
@@ -139,6 +152,13 @@ function BiddingRoomPage() {
           {!loading && auction ? (
             <div>
               <h2 className="text-2xl font-semibold text-emerald-900">{auction.plant_title}</h2>
+              <div className="mt-2 rounded-lg bg-gray-50 p-3">
+                <p className="text-sm text-gray-700">Seller: {winner?.seller_email || '-'}</p>
+                {winner?.seller_display_name ? (
+                  <p className="text-sm text-gray-700">Name: {winner.seller_display_name}</p>
+                ) : null}
+                {winner?.seller_phone ? <p className="text-sm text-gray-700">Phone: {winner.seller_phone}</p> : null}
+              </div>
               <p className="mt-2 text-sm text-gray-700">Current price: {auction.current_price}</p>
               <p className="mt-1 text-sm text-gray-600">
                 End time: {auction.end_time ? new Date(auction.end_time).toLocaleString() : '-'}
@@ -168,6 +188,45 @@ function BiddingRoomPage() {
               </button>
             </div>
           </form>
+        ) : null}
+
+        {!loading && auction?.status === 'ended' ? (
+          <div className="mb-6">
+            {loadingWinner ? (
+              <div className="rounded-2xl bg-gray-100 p-6 text-center text-gray-600">
+                Loading auction results...
+              </div>
+            ) : winner?.winner_email ? (
+              <div className="rounded-2xl bg-blue-50 p-6 ring-1 ring-blue-200">
+                <p className="text-lg font-semibold text-blue-800">Auction Ended!</p>
+                <p className="mt-2 text-sm text-blue-800">Winner: {winner.winner_email}</p>
+                {winner.winner_display_name ? (
+                  <p className="text-sm text-blue-800">Name: {winner.winner_display_name}</p>
+                ) : null}
+
+                {user?.userId === auction?.winner_id ? (
+                  <p className="mt-3 text-sm font-semibold text-blue-800">🎉 Congratulations! You won this auction.</p>
+                ) : null}
+
+                {user?.role === 'seller' ? (
+                  <div className="mt-3 rounded-lg bg-blue-100 p-3">
+                    <p className="text-sm font-semibold text-blue-800">Winner Contact Information:</p>
+                    <p className="text-sm text-blue-800">Email: {winner.winner_email}</p>
+                    {winner.winner_display_name ? (
+                      <p className="text-sm text-blue-800">Name: {winner.winner_display_name}</p>
+                    ) : null}
+                    {winner.winner_phone ? (
+                      <p className="text-sm text-blue-800">Phone: {winner.winner_phone}</p>
+                    ) : null}
+                  </div>
+                ) : null}
+              </div>
+            ) : (
+              <div className="rounded-2xl bg-gray-100 p-6 ring-1 ring-gray-300">
+                <p className="font-semibold text-gray-900">Auction ended with no bids</p>
+              </div>
+            )}
+          </div>
         ) : null}
 
         <div className="rounded-2xl bg-white p-6 shadow ring-1 ring-emerald-100">

@@ -16,15 +16,24 @@ function DashboardPage() {
 
   const menus = {
     seller: [
+      { label: 'My Profile', to: '/profile' },
       { label: 'My Plants', to: '/my-plants' },
-      { label: 'Create Auction', to: '/create-auction' },
+      {
+        label: 'Auction Management',
+        to: '/create-auction',
+        description: 'Create and manage your plant auctions',
+      },
       { label: 'Browse Auctions', to: '/auctions' },
     ],
     admin: [
+      { label: 'My Profile', to: '/profile' },
       { label: 'Manage Plants', to: '/admin/plants' },
       { label: 'Manage Auctions', to: '/admin/auctions' },
     ],
-    buyer: [{ label: 'Browse Auctions', to: '/auctions' }],
+    buyer: [
+      { label: 'My Profile', to: '/profile' },
+      { label: 'Browse Auctions', to: '/auctions' },
+    ],
   }
 
   return (
@@ -51,7 +60,7 @@ function DashboardPage() {
               className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-emerald-100 transition hover:-translate-y-1 hover:shadow-xl"
             >
               <h2 className="text-xl font-semibold text-emerald-900">{item.label}</h2>
-              <p className="mt-2 text-sm text-gray-600">Open {item.label.toLowerCase()} section</p>
+              <p className="mt-2 text-sm text-gray-600">{item.description || `Open ${item.label.toLowerCase()} section`}</p>
             </Link>
           ))}
         </div>

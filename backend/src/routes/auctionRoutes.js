@@ -9,12 +9,16 @@ import {
 	endAuctionController,
 	deleteAuctionController,
 	updateAuctionController,
+	getWonAuctionsController,
+	getAuctionWithWinnerController,
 } from '../controllers/auctionController.js'
 
 const router = Router()
 
 router.get('/', authenticate, getActiveAuctionsController)
 router.get('/my', authenticate, authorize('seller'), getMyAuctionsController)
+router.get('/won', authenticate, authorize('buyer'), getWonAuctionsController)
+router.get('/:id/winner', authenticate, getAuctionWithWinnerController)
 router.get('/:id', authenticate, getAuctionByIdController)
 
 router.post('/', authenticate, authorize('seller'), createAuctionController)

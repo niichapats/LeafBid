@@ -9,6 +9,7 @@ function CreateAuctionPage() {
   const [plants, setPlants] = useState([])
   const [approvedPlants, setApprovedPlants] = useState([])
   const [auctions, setAuctions] = useState([])
+  const [auctionWinners, setAuctionWinners] = useState({})
   const [selectedPlantId, setSelectedPlantId] = useState('')
   const [startPrice, setStartPrice] = useState('')
   const [startTime, setStartTime] = useState('')
@@ -42,6 +43,20 @@ function CreateAuctionPage() {
       setPlants(myPlants)
       setApprovedPlants(onlyApprovedPlants)
       setAuctions(auctionsRes.data || [])
+
+      // Load winner info for ended auctions
+      const winners = {}
+      for (const auction of auctionsRes.data || []) {
+        if (auction.status === 'ended') {
+          try {
+            const winnerResponse = await api.get(`/auctions/${auction.id}/winner`)
+            winners[auction.id] = winnerResponse.data
+          } catch (err) {
+            console.error(`Failed to load winner for auction ${auction.id}:`, err)
+          }
+        }
+      }
+      setAuctionWinners(winners)
 
       if (!selectedPlantId && onlyApprovedPlants.length > 0) {
         setSelectedPlantId(String(onlyApprovedPlants[0].id))
@@ -186,10 +201,13 @@ function CreateAuctionPage() {
       <div className="mx-auto max-w-5xl">
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-emerald-900">Create Auction</h1>
-            <p className="mt-1 text-sm text-gray-600">Create and start auctions for your approved plants</p>
+            <h1 className="text-3xl font-bold text-emerald-900">Auction Management</h1>
+            <p className="mt-1 text-sm text-gray-600">Create and manage auctions for your approved plants</p>
           </div>
-          <Link to="/dashboard" className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+          <Link
+            to="/dashboard"
+            className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          >
             Back
           </Link>
         </div>
@@ -198,6 +216,7 @@ function CreateAuctionPage() {
         {success ? <p className="mb-4 rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{success}</p> : null}
 
         <div className="mb-6 rounded-2xl bg-white p-6 shadow ring-1 ring-emerald-100">
+          <h2 className="mb-4 text-xl font-semibold text-emerald-900">Create New Auction</h2>
           {loading ? <p className="text-gray-600">Loading...</p> : null}
 
           {!loading && approvedPlants.length === 0 ? (
@@ -286,6 +305,7 @@ function CreateAuctionPage() {
                   <div>
                     <p className="font-semibold text-emerald-900">{auction.plant_title || `Plant #${auction.plant_id}`}</p>
                     <p className="text-sm text-gray-600">Auction #{auction.id}</p>
+
                     <div className="mt-2">
                       {auction.status === 'scheduled' ? (
                         <span className="rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800">Scheduled</span>
@@ -297,6 +317,7 @@ function CreateAuctionPage() {
                         <span className="rounded-full bg-gray-200 px-3 py-1 text-xs font-medium text-gray-700">Ended</span>
                       ) : null}
                     </div>
+
                     <p className="text-sm text-gray-600">Start price: {auction.start_price}</p>
                     <p className="text-sm text-gray-600">Current price: {auction.current_price}</p>
                     <p className="text-sm text-gray-600">
@@ -305,10 +326,23 @@ function CreateAuctionPage() {
                     <p className="text-sm text-gray-600">
                       End time: {auction.end_time ? new Date(auction.end_time).toLocaleString() : '-'}
                     </p>
+
                     {auction.status === 'ended' ? (
-                      <p className="text-sm text-gray-700">
-                        Winner ID: {auction.winner_id ? auction.winner_id : 'No winner'}
-                      </p>
+                      <div className="mt-2 rounded-lg bg-blue-50 p-2">
+                        {auctionWinners[auction.id] ? (
+                          <>
+                            <p className="text-sm font-semibold text-blue-800">Winner: {auctionWinners[auction.id].winner_email}</p>
+                            {auctionWinners[auction.id].winner_display_name ? (
+                              <p className="text-xs text-blue-800">Name: {auctionWinners[auction.id].winner_display_name}</p>
+                            ) : null}
+                            {auctionWinners[auction.id].winner_phone ? (
+                              <p className="text-xs text-blue-800">Phone: {auctionWinners[auction.id].winner_phone}</p>
+                            ) : null}
+                          </>
+                        ) : (
+                          <p className="text-sm font-semibold text-blue-700">No bids — no winner</p>
+                        )}
+                      </div>
                     ) : null}
                   </div>
 

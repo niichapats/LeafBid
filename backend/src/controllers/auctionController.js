@@ -7,6 +7,8 @@ import {
 	endAuction,
 	deleteAuction,
 	updateAuction,
+	getWonAuctions,
+	getAuctionWithWinner,
 } from '../services/auctionService.js'
 
 export async function createAuctionController(req, res) {
@@ -103,3 +105,26 @@ export async function updateAuctionController(req, res) {
 		return res.status(400).json({ error: err.message })
 	}
 }
+
+export async function getWonAuctionsController(req, res) {
+	const buyerId = req.user.userId
+
+	try {
+		const result = await getWonAuctions(buyerId)
+		return res.status(200).json(result)
+	} catch (err) {
+		return res.status(500).json({ error: err.message })
+	}
+}
+
+export async function getAuctionWithWinnerController(req, res) {
+	const auctionId = req.params.id
+
+	try {
+		const result = await getAuctionWithWinner(auctionId)
+		return res.status(200).json(result)
+	} catch (err) {
+		return res.status(404).json({ error: err.message })
+	}
+}
+
