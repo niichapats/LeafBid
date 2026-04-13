@@ -146,8 +146,8 @@ function MyPlantsPage() {
       <div className="mx-auto max-w-5xl">
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-emerald-900">My Plants</h1>
-            <p className="mt-1 text-sm text-gray-600">Manage your plant listings for LeafBid</p>
+            <h1 className="text-3xl font-bold text-emerald-900">Plants Management</h1>
+            <p className="mt-1 text-sm text-gray-600">Create and manage your plant listings for LeafBid</p>
           </div>
           <div className="flex gap-2">
             <Link to="/dashboard" className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
@@ -205,95 +205,99 @@ function MyPlantsPage() {
           </form>
         ) : null}
 
-        <div className="space-y-3">
-          {loading ? <p className="text-gray-600">Loading plants...</p> : null}
-          {!loading && plants.length === 0 ? <p className="text-gray-600">No plants found.</p> : null}
+        <div className="rounded-2xl bg-white p-6 shadow ring-1 ring-emerald-100">
+          <h2 className="mb-4 text-xl font-semibold text-emerald-900">My Plants</h2>
 
-          {plants.map((plant) => (
-            <div key={plant.id} className="rounded-2xl bg-white p-5 shadow ring-1 ring-emerald-100">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h2 className="text-xl font-semibold text-emerald-900">{plant.title}</h2>
-                  <div className="mt-2">
-                    {plant.image_url ? (
-                      <img
-                        src={`http://localhost:3000${plant.image_url}`}
-                        alt={plant.title}
-                        className="h-32 w-48 rounded-lg border border-gray-200 object-cover"
-                      />
-                    ) : (
-                      <p className="text-sm text-gray-500">No image</p>
-                    )}
+          <div className="space-y-3">
+            {loading ? <p className="text-gray-600">Loading plants...</p> : null}
+            {!loading && plants.length === 0 ? <p className="text-gray-600">No plants found.</p> : null}
+
+            {plants.map((plant) => (
+              <div key={plant.id} className="rounded-xl border border-emerald-100 p-4">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h2 className="text-xl font-semibold text-emerald-900">{plant.title}</h2>
+                    <div className="mt-2">
+                      {plant.image_url ? (
+                        <img
+                          src={`http://localhost:3000${plant.image_url}`}
+                          alt={plant.title}
+                          className="h-32 w-48 rounded-lg border border-gray-200 object-cover"
+                        />
+                      ) : (
+                        <p className="text-sm text-gray-500">No image</p>
+                      )}
+                    </div>
+                    <p className="mt-2 text-sm text-gray-600">{plant.description || 'No description'}</p>
+                    <div className="mt-3 flex flex-wrap gap-2 text-xs">
+                      <span className={`rounded-full px-3 py-1 ${getStatusClass(plant.status)}`}>Status: {plant.status}</span>
+                      <span className="rounded-full bg-gray-100 px-3 py-1 text-gray-700">
+                        Created: {plant.created_at ? new Date(plant.created_at).toLocaleString() : '-'}
+                      </span>
+                    </div>
+
+                    {editingPlantId === plant.id ? (
+                      <form onSubmit={(event) => handleUpdatePlant(event, plant)} className="mt-4 space-y-3 rounded-xl border border-emerald-100 p-4">
+                        <input
+                          value={editTitle}
+                          onChange={(e) => setEditTitle(e.target.value)}
+                          className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
+                          placeholder="Title"
+                          required
+                        />
+                        <textarea
+                          value={editDescription}
+                          onChange={(e) => setEditDescription(e.target.value)}
+                          className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
+                          rows={3}
+                          placeholder="Description"
+                        />
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => setEditImageFile(e.target.files?.[0] || null)}
+                          className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
+                        />
+                        <div className="flex gap-2">
+                          <button
+                            type="submit"
+                            disabled={submitting}
+                            className="rounded-xl bg-emerald-600 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
+                          >
+                            {submitting ? 'Saving...' : 'Save'}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={handleCancelEdit}
+                            className="rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </form>
+                    ) : null}
                   </div>
-                  <p className="mt-2 text-sm text-gray-600">{plant.description || 'No description'}</p>
-                  <div className="mt-3 flex flex-wrap gap-2 text-xs">
-                    <span className={`rounded-full px-3 py-1 ${getStatusClass(plant.status)}`}>Status: {plant.status}</span>
-                    <span className="rounded-full bg-gray-100 px-3 py-1 text-gray-700">
-                      Created: {plant.created_at ? new Date(plant.created_at).toLocaleString() : '-'}
-                    </span>
-                  </div>
 
-                  {editingPlantId === plant.id ? (
-                    <form onSubmit={(event) => handleUpdatePlant(event, plant)} className="mt-4 space-y-3 rounded-xl border border-emerald-100 p-4">
-                      <input
-                        value={editTitle}
-                        onChange={(e) => setEditTitle(e.target.value)}
-                        className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
-                        placeholder="Title"
-                        required
-                      />
-                      <textarea
-                        value={editDescription}
-                        onChange={(e) => setEditDescription(e.target.value)}
-                        className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
-                        rows={3}
-                        placeholder="Description"
-                      />
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => setEditImageFile(e.target.files?.[0] || null)}
-                        className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
-                      />
-                      <div className="flex gap-2">
-                        <button
-                          type="submit"
-                          disabled={submitting}
-                          className="rounded-xl bg-emerald-600 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
-                        >
-                          {submitting ? 'Saving...' : 'Save'}
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleCancelEdit}
-                          className="rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </form>
-                  ) : null}
-                </div>
-
-                <div className="flex gap-2">
-                  {plant.status === 'pending' ? (
+                  <div className="flex gap-2">
+                    {plant.status === 'pending' ? (
+                      <button
+                        onClick={() => openEditForm(plant)}
+                        className="rounded-xl bg-amber-600 px-3 py-2 text-sm font-semibold text-white hover:bg-amber-700"
+                      >
+                        Edit
+                      </button>
+                    ) : null}
                     <button
-                      onClick={() => openEditForm(plant)}
-                      className="rounded-xl bg-amber-600 px-3 py-2 text-sm font-semibold text-white hover:bg-amber-700"
+                      onClick={() => handleDelete(plant.id)}
+                      className="rounded-xl bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-700"
                     >
-                      Edit
+                      Delete
                     </button>
-                  ) : null}
-                  <button
-                    onClick={() => handleDelete(plant.id)}
-                    className="rounded-xl bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-700"
-                  >
-                    Delete
-                  </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </div>

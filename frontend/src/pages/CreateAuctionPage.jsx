@@ -18,6 +18,7 @@ function CreateAuctionPage() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const [showCreateForm, setShowCreateForm] = useState(false)
   const [editingAuctionId, setEditingAuctionId] = useState(null)
   const [editStartPrice, setEditStartPrice] = useState('')
   const [editStartTime, setEditStartTime] = useState('')
@@ -94,7 +95,7 @@ function CreateAuctionPage() {
       })
 
       const createdAuction = response.data
-      setSuccess(`Auction created successfully (ID: ${createdAuction.id})`)
+      setSuccess('Auction created successfully')
       setAuctions((previous) => [createdAuction, ...previous])
       setStartPrice('')
       setStartTime('')
@@ -111,7 +112,7 @@ function CreateAuctionPage() {
       setError('')
       setSuccess('')
       await api.patch(`/auctions/${auctionId}/start`)
-      setSuccess(`Auction ${auctionId} started`)
+      setSuccess('Auction started')
       await loadData()
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to start auction')
@@ -123,7 +124,7 @@ function CreateAuctionPage() {
       setError('')
       setSuccess('')
       await api.patch(`/auctions/${auctionId}/end`)
-      setSuccess(`Auction ${auctionId} ended`)
+      setSuccess('Auction ended')
       await loadData()
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to end auction')
@@ -169,7 +170,7 @@ function CreateAuctionPage() {
         startTime: editStartTime,
         endTime: editEndTime,
       })
-      setSuccess(`Auction ${auctionId} updated`)
+      setSuccess('Auction updated')
       setEditingAuctionId(null)
       await loadData()
     } catch (err) {
@@ -189,7 +190,7 @@ function CreateAuctionPage() {
       setError('')
       setSuccess('')
       await api.delete(`/auctions/${auctionId}`)
-      setSuccess(`Auction ${auctionId} deleted`)
+      setSuccess('Auction deleted')
       await loadData()
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to delete auction')
@@ -204,90 +205,100 @@ function CreateAuctionPage() {
             <h1 className="text-3xl font-bold text-emerald-900">Auction Management</h1>
             <p className="mt-1 text-sm text-gray-600">Create and manage auctions for your approved plants</p>
           </div>
-          <Link
-            to="/dashboard"
-            className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-          >
-            Back
-          </Link>
+          <div className="flex gap-2">
+            <Link
+              to="/dashboard"
+              className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            >
+              Back
+            </Link>
+            <button
+              onClick={() => setShowCreateForm((value) => !value)}
+              className="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700"
+            >
+              Create New Auction
+            </button>
+          </div>
         </div>
 
         {error ? <p className="mb-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">{error}</p> : null}
         {success ? <p className="mb-4 rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{success}</p> : null}
 
-        <div className="mb-6 rounded-2xl bg-white p-6 shadow ring-1 ring-emerald-100">
-          <h2 className="mb-4 text-xl font-semibold text-emerald-900">Create New Auction</h2>
-          {loading ? <p className="text-gray-600">Loading...</p> : null}
+        {showCreateForm ? (
+          <div className="mb-6 rounded-2xl bg-white p-6 shadow ring-1 ring-emerald-100">
+            <h2 className="mb-4 text-xl font-semibold text-emerald-900">Create New Auction</h2>
+            {loading ? <p className="text-gray-600">Loading...</p> : null}
 
-          {!loading && approvedPlants.length === 0 ? (
-            <p className="text-gray-600">No approved plants available. Wait for admin approval before creating auctions.</p>
-          ) : null}
+            {!loading && approvedPlants.length === 0 ? (
+              <p className="text-gray-600">No approved plants available. Wait for admin approval before creating auctions.</p>
+            ) : null}
 
-          {!loading && approvedPlants.length > 0 ? (
-            <form onSubmit={handleCreateAuction} className="grid gap-4 md:grid-cols-2">
-              <div className="md:col-span-2">
-                <label className="mb-1 block text-sm font-medium text-gray-700">Approved Plant</label>
-                <select
-                  value={selectedPlantId}
-                  onChange={(e) => setSelectedPlantId(e.target.value)}
-                  className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
-                  required
-                >
-                  {approvedPlants.map((plant) => (
-                    <option key={plant.id} value={plant.id}>
-                      {plant.title}
-                    </option>
-                  ))}
-                </select>
-              </div>
+            {!loading && approvedPlants.length > 0 ? (
+              <form onSubmit={handleCreateAuction} className="grid gap-4 md:grid-cols-2">
+                <div className="md:col-span-2">
+                  <label className="mb-1 block text-sm font-medium text-gray-700">Approved Plant</label>
+                  <select
+                    value={selectedPlantId}
+                    onChange={(e) => setSelectedPlantId(e.target.value)}
+                    className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
+                    required
+                  >
+                    {approvedPlants.map((plant) => (
+                      <option key={plant.id} value={plant.id}>
+                        {plant.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-              <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">Start Price</label>
-                <input
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  value={startPrice}
-                  onChange={(e) => setStartPrice(e.target.value)}
-                  className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
-                  required
-                />
-              </div>
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-gray-700">Start Price</label>
+                  <input
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={startPrice}
+                    onChange={(e) => setStartPrice(e.target.value)}
+                    className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
+                    required
+                  />
+                </div>
 
-              <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">Start Time</label>
-                <input
-                  type="datetime-local"
-                  value={startTime}
-                  onChange={(e) => setStartTime(e.target.value)}
-                  className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
-                  required
-                />
-              </div>
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-gray-700">Start Time</label>
+                  <input
+                    type="datetime-local"
+                    value={startTime}
+                    onChange={(e) => setStartTime(e.target.value)}
+                    className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
+                    required
+                  />
+                </div>
 
-              <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">End Time</label>
-                <input
-                  type="datetime-local"
-                  value={endTime}
-                  onChange={(e) => setEndTime(e.target.value)}
-                  className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
-                  required
-                />
-              </div>
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-gray-700">End Time</label>
+                  <input
+                    type="datetime-local"
+                    value={endTime}
+                    onChange={(e) => setEndTime(e.target.value)}
+                    className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
+                    required
+                  />
+                </div>
 
-              <div className="flex items-end">
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="w-full rounded-xl bg-emerald-600 px-4 py-2 font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
-                >
-                  {submitting ? 'Creating...' : 'Create Auction'}
-                </button>
-              </div>
-            </form>
-          ) : null}
-        </div>
+                <div className="flex items-end">
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="w-full rounded-xl bg-emerald-600 px-4 py-2 font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
+                  >
+                    {submitting ? 'Creating...' : 'Create Auction'}
+                  </button>
+                </div>
+              </form>
+            ) : null}
+          </div>
+        ) : null}
 
         <div className="rounded-2xl bg-white p-6 shadow ring-1 ring-emerald-100">
           <h2 className="mb-4 text-xl font-semibold text-emerald-900">My Auctions</h2>
@@ -301,106 +312,119 @@ function CreateAuctionPage() {
                 className="cursor-pointer rounded-xl border border-emerald-100 p-4"
                 onClick={() => navigate(`/auctions/${auction.id}`)}
               >
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <p className="font-semibold text-emerald-900">{auction.plant_title || `Plant #${auction.plant_id}`}</p>
-                    <p className="text-sm text-gray-600">Auction #{auction.id}</p>
+                <div className="flex items-start gap-4">
+                  {auction.image_url ? (
+                    <img
+                      src={`http://localhost:3000${auction.image_url}`}
+                      alt={auction.plant_title}
+                      className="w-32 h-32 object-cover rounded-lg shrink-0"
+                    />
+                  ) : (
+                    <div className="w-32 h-32 bg-gray-100 rounded-lg shrink-0 flex items-center justify-center text-gray-400 text-sm">
+                      No image
+                    </div>
+                  )}
 
-                    <div className="mt-2">
-                      {auction.status === 'scheduled' ? (
-                        <span className="rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800">Scheduled</span>
-                      ) : null}
-                      {auction.status === 'active' ? (
-                        <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800">Active</span>
-                      ) : null}
+                  <div className="flex-1 flex items-start justify-between gap-3">
+                    <div>
+                      <p className="font-semibold text-emerald-900">{auction.plant_title || `Plant #${auction.plant_id}`}</p>
+
+                      <div className="mt-2">
+                        {auction.status === 'scheduled' ? (
+                          <span className="rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800">Scheduled</span>
+                        ) : null}
+                        {auction.status === 'active' ? (
+                          <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800">Active</span>
+                        ) : null}
+                        {auction.status === 'ended' ? (
+                          <span className="rounded-full bg-gray-200 px-3 py-1 text-xs font-medium text-gray-700">Ended</span>
+                        ) : null}
+                      </div>
+
+                      <p className="mt-2 text-sm text-gray-600">Start price: {auction.start_price}</p>
+                      <p className="text-sm text-gray-600">Current price: {auction.current_price}</p>
+                      <p className="text-sm text-gray-600">
+                        Start time: {auction.start_time ? new Date(auction.start_time).toLocaleString() : '-'}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        End time: {auction.end_time ? new Date(auction.end_time).toLocaleString() : '-'}
+                      </p>
+
                       {auction.status === 'ended' ? (
-                        <span className="rounded-full bg-gray-200 px-3 py-1 text-xs font-medium text-gray-700">Ended</span>
+                        <div className="mt-2 rounded-lg bg-blue-50 p-2">
+                          {auctionWinners[auction.id] ? (
+                            <>
+                              <p className="text-sm font-semibold text-blue-800">Winner: {auctionWinners[auction.id].winner_email}</p>
+                              {auctionWinners[auction.id].winner_display_name ? (
+                                <p className="text-xs text-blue-800">Name: {auctionWinners[auction.id].winner_display_name}</p>
+                              ) : null}
+                              {auctionWinners[auction.id].winner_phone ? (
+                                <p className="text-xs text-blue-800">Phone: {auctionWinners[auction.id].winner_phone}</p>
+                              ) : null}
+                            </>
+                          ) : (
+                            <p className="text-sm font-semibold text-blue-700">No bids — no winner</p>
+                          )}
+                        </div>
                       ) : null}
                     </div>
 
-                    <p className="text-sm text-gray-600">Start price: {auction.start_price}</p>
-                    <p className="text-sm text-gray-600">Current price: {auction.current_price}</p>
-                    <p className="text-sm text-gray-600">
-                      Start time: {auction.start_time ? new Date(auction.start_time).toLocaleString() : '-'}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      End time: {auction.end_time ? new Date(auction.end_time).toLocaleString() : '-'}
-                    </p>
+                    <div className="flex gap-2">
+                      {auction.status === 'scheduled' ? (
+                        <>
+                          <button
+                            onClick={(event) => {
+                              event.stopPropagation()
+                              handleStartAuction(auction.id)
+                            }}
+                            className="rounded bg-green-700 px-4 py-2 font-medium text-white hover:bg-green-800"
+                          >
+                            Start Auction
+                          </button>
+                          <button
+                            onClick={(event) => handleEditClick(event, auction)}
+                            className="rounded-xl bg-yellow-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-yellow-800"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={(event) => handleDeleteAuction(event, auction.id)}
+                            className="rounded-xl bg-red-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-700"
+                          >
+                            Delete
+                          </button>
+                        </>
+                      ) : null}
 
-                    {auction.status === 'ended' ? (
-                      <div className="mt-2 rounded-lg bg-blue-50 p-2">
-                        {auctionWinners[auction.id] ? (
-                          <>
-                            <p className="text-sm font-semibold text-blue-800">Winner: {auctionWinners[auction.id].winner_email}</p>
-                            {auctionWinners[auction.id].winner_display_name ? (
-                              <p className="text-xs text-blue-800">Name: {auctionWinners[auction.id].winner_display_name}</p>
-                            ) : null}
-                            {auctionWinners[auction.id].winner_phone ? (
-                              <p className="text-xs text-blue-800">Phone: {auctionWinners[auction.id].winner_phone}</p>
-                            ) : null}
-                          </>
-                        ) : (
-                          <p className="text-sm font-semibold text-blue-700">No bids — no winner</p>
-                        )}
-                      </div>
-                    ) : null}
-                  </div>
+                      {auction.status === 'active' ? (
+                        <>
+                          <button
+                            onClick={(event) => {
+                              event.stopPropagation()
+                              handleEndAuction(auction.id)
+                            }}
+                            className="rounded-xl bg-yellow-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-yellow-800"
+                          >
+                            End Auction
+                          </button>
+                          <button
+                            onClick={(event) => handleDeleteAuction(event, auction.id)}
+                            className="rounded-xl bg-red-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-700"
+                          >
+                            Delete
+                          </button>
+                        </>
+                      ) : null}
 
-                  <div className="flex gap-2">
-                    {auction.status === 'scheduled' ? (
-                      <>
-                        <button
-                          onClick={(event) => {
-                            event.stopPropagation()
-                            handleStartAuction(auction.id)
-                          }}
-                          className="rounded bg-green-700 px-4 py-2 font-medium text-white hover:bg-green-800"
-                        >
-                          Start Auction
-                        </button>
-                        <button
-                          onClick={(event) => handleEditClick(event, auction)}
-                          className="rounded bg-yellow-700 px-4 py-2 font-medium text-white hover:bg-yellow-800"
-                        >
-                          Edit
-                        </button>
+                      {auction.status === 'ended' ? (
                         <button
                           onClick={(event) => handleDeleteAuction(event, auction.id)}
-                          className="rounded bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700"
+                          className="rounded-xl bg-red-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-700"
                         >
                           Delete
                         </button>
-                      </>
-                    ) : null}
-
-                    {auction.status === 'active' ? (
-                      <>
-                        <button
-                          onClick={(event) => {
-                            event.stopPropagation()
-                            handleEndAuction(auction.id)
-                          }}
-                          className="rounded bg-yellow-700 px-4 py-2 font-medium text-white hover:bg-yellow-800"
-                        >
-                          End Auction
-                        </button>
-                        <button
-                          onClick={(event) => handleDeleteAuction(event, auction.id)}
-                          className="rounded bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700"
-                        >
-                          Delete
-                        </button>
-                      </>
-                    ) : null}
-
-                    {auction.status === 'ended' ? (
-                      <button
-                        onClick={(event) => handleDeleteAuction(event, auction.id)}
-                        className="rounded bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700"
-                      >
-                        Delete
-                      </button>
-                    ) : null}
+                      ) : null}
+                    </div>
                   </div>
                 </div>
 
