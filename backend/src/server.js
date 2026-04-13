@@ -11,6 +11,7 @@ import plantRoutes from './routes/plantRoutes.js'
 import auctionRoutes from './routes/auctionRoutes.js'
 import profileRoutes from './routes/profileRoutes.js'
 import initSocket from './socket/socketHandler.js'
+import { initScheduler } from './scheduler/auctionScheduler.js'
 
 const app = express()
 const httpServer = createServer(app)
@@ -35,6 +36,7 @@ pool
   .query('SELECT 1')
   .then(() => {
     console.log('Database connected')
+    initScheduler()
     httpServer.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`)
     })

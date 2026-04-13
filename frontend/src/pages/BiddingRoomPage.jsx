@@ -205,7 +205,7 @@ function BiddingRoomPage() {
                 ) : null}
 
                 {user?.userId === auction?.winner_id ? (
-                  <p className="mt-3 text-sm font-semibold text-blue-800">🎉 Congratulations! You won this auction.</p>
+                  <p className="mt-3 text-sm font-semibold text-blue-800">Congratulations! You won this auction.</p>
                 ) : null}
 
                 {user?.role === 'seller' ? (
