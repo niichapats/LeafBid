@@ -25,6 +25,7 @@ export function getUser() {
       userId: decoded.userId,
       role: decoded.role,
       email: decoded.email,
+      displayName: decoded.displayName,
     }
   } catch (error) {
     return null

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Link, Navigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
+import Navbar from '../components/Navbar.jsx'
 import api from '../utils/api.js'
 import { getUser } from '../utils/auth.js'
 
@@ -61,56 +62,81 @@ function AdminAuctionsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-emerald-50 via-white to-lime-50 px-4 py-8">
-      <div className="mx-auto max-w-5xl">
-        <div className="mb-6 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-emerald-900">Manage Auctions</h1>
-            <p className="mt-1 text-sm text-gray-600">Admin tools for ending and deleting auctions</p>
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-mist-950 px-4 py-8">
+        <div className="mx-auto max-w-5xl">
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold text-emerald-100">Manage Auctions</h1>
+            <p className="mt-1 text-sm text-gray-300">Admin tools for ending and deleting auctions</p>
           </div>
-          <Link
-            to="/dashboard"
-            className="rounded border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 hover:bg-gray-50"
-          >
-            Back
-          </Link>
-        </div>
 
-        {error ? <p className="mb-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">{error}</p> : null}
-        {success ? <p className="mb-4 rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{success}</p> : null}
+        {error ? <p className="mb-4 bg-red-400/20 text-red-300 border border-red-400/50 rounded-full px-3 py-1 text-sm">{error}</p> : null}
+        {success ? <p className="mb-4 bg-green-400/20 text-green-300 border border-green-400/50 rounded-full px-3 py-1 text-sm">{success}</p> : null}
 
-        <div className="rounded-2xl bg-white p-6 shadow ring-1 ring-emerald-100">
-          {loading ? <p className="text-gray-600">Loading auctions...</p> : null}
-          {!loading && auctions.length === 0 ? <p className="text-gray-600">No auctions found</p> : null}
+        <div className="rounded-2xl p-6 shadow ring-1 ring-emerald-100">
+          {loading ? <p className="text-white/90">Loading auctions...</p> : null}
+          {!loading && auctions.length === 0 ? <p className="text-white/90">No auctions found</p> : null}
 
           <div className="space-y-3">
             {auctions.map((auction) => (
-              <div key={auction.id} className="rounded-xl border border-emerald-100 p-4">
-                <p className="font-semibold text-emerald-900">{auction.plant_title || `Plant #${auction.plant_id}`}</p>
-                <p className="text-sm text-gray-600">Current price: {auction.current_price}</p>
-                <p className="text-sm text-gray-600">Status: {auction.status}</p>
-                <p className="text-sm text-gray-600">
-                  Start time: {auction.start_time ? new Date(auction.start_time).toLocaleString() : '-'}
-                </p>
-                <p className="text-sm text-gray-600">
-                  End time: {auction.end_time ? new Date(auction.end_time).toLocaleString() : '-'}
-                </p>
+              <div key={auction.id} className="rounded-xl border border-emerald-200/70 bg-linear-to-br from-emerald-200/35 to-lime-200/30 p-4 text-white shadow-sm transition-shadow hover:shadow-lg">
+                <div className="flex items-start gap-4">
+                  {auction.image_url ? (
+                    <img
+                      src={`http://localhost:3000${auction.image_url}`}
+                      alt={auction.plant_title}
+                      className="w-32 h-32 object-cover rounded-lg shrink-0"
+                    />
+                  ) : (
+                    <div className="w-32 h-32 bg-gray-100 rounded-lg shrink-0 flex items-center justify-center text-gray-400 text-sm">
+                      No image
+                    </div>
+                  )}
 
-                <div className="mt-3 flex gap-2">
-                  {auction.status === 'active' ? (
+                  <div className="flex-1 flex items-start justify-between gap-3">
+                    <div>
+                      <p className="font-semibold text-white">{auction.plant_title || `Plant #${auction.plant_id}`}</p>
+
+                      <div className="mt-2">
+                        {auction.status === 'scheduled' ? (
+                          <span className="bg-yellow-400/20 text-yellow-300 border border-yellow-400/50 rounded-full px-3 py-1 text-sm">Scheduled</span>
+                        ) : null}
+                        {auction.status === 'active' ? (
+                          <span className="bg-green-400/20 text-green-300 border border-green-400/50 rounded-full px-3 py-1 text-sm">Active</span>
+                        ) : null}
+                        {auction.status === 'ended' ? (
+                          <span className="bg-gray-400/20 text-gray-300 border border-gray-400/50 rounded-full px-3 py-1 text-sm">Ended</span>
+                        ) : null}
+                      </div>
+
+                      <p className="mt-2 text-sm text-white/90">Start price: ฿{auction.start_price}</p>
+                      <p className="text-sm text-white/90">Current price: ฿{auction.current_price}</p>
+                      <p className="text-sm text-white/90">
+                        Start time: {auction.start_time ? new Date(auction.start_time).toLocaleString() : '-'}
+                      </p>
+                      <p className="text-sm text-white/90">
+                        End time: {auction.end_time ? new Date(auction.end_time).toLocaleString() : '-'}
+                      </p>
+                    </div>
+
+                    <div className="flex gap-2">
+                    {auction.status === 'active' ? (
+                      <button
+                        onClick={() => handleEndAuction(auction.id)}
+                        className="rounded-full border border-yellow-400 px-3 py-1.5 text-sm font-medium text-yellow-300 transition-colors hover:bg-yellow-400/20"
+                      >
+                        End Auction
+                      </button>
+                    ) : null}
                     <button
-                      onClick={() => handleEndAuction(auction.id)}
-                      className="rounded bg-yellow-700 px-4 py-2 font-medium text-white hover:bg-yellow-800"
+                      onClick={() => handleDeleteAuction(auction.id)}
+                      className="rounded-full border border-red-400 px-3 py-1.5 text-sm font-medium text-red-300 transition-colors hover:bg-red-400/20"
                     >
-                      End Auction
+                      Delete
                     </button>
-                  ) : null}
-                  <button
-                    onClick={() => handleDeleteAuction(auction.id)}
-                    className="rounded bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700"
-                  >
-                    Delete
-                  </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
@@ -118,6 +144,7 @@ function AdminAuctionsPage() {
         </div>
       </div>
     </div>
+    </>
   )
 }
 

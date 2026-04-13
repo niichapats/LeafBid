@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Link, Navigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
+import Navbar from '../components/Navbar.jsx'
 import api from '../utils/api.js'
 import { getUser } from '../utils/auth.js'
 
@@ -131,44 +132,41 @@ function MyPlantsPage() {
 
   const getStatusClass = (status) => {
     if (status === 'approved') {
-      return 'bg-emerald-50 text-emerald-700'
+      return 'bg-green-400/20 text-green-300 border border-green-400/50 rounded-full px-3 py-1 text-sm'
     }
 
     if (status === 'pending') {
-      return 'bg-amber-50 text-amber-700'
+      return 'bg-yellow-400/20 text-yellow-300 border border-yellow-400/50 rounded-full px-3 py-1 text-sm'
     }
 
-    return 'bg-red-50 text-red-700'
+    return 'bg-red-400/20 text-red-300 border border-red-400/50 rounded-full px-3 py-1 text-sm'
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-emerald-50 via-white to-lime-50 px-4 py-8">
-      <div className="mx-auto max-w-5xl">
-        <div className="mb-6 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-emerald-900">Plants Management</h1>
-            <p className="mt-1 text-sm text-gray-600">Create and manage your plant listings for LeafBid</p>
-          </div>
-          <div className="flex gap-2">
-            <Link to="/dashboard" className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
-              Back
-            </Link>
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-mist-950 px-4 py-8">
+        <div className="mx-auto max-w-5xl">
+          <div className="mb-6 flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-emerald-100">Plants Management</h1>
+              <p className="mt-1 text-sm text-gray-300">Create and manage your plant listings for LeafBid</p>
+            </div>
             <button
               onClick={() => setShowForm((value) => !value)}
-              className="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700"
+              className="rounded-full border border-green-400 px-3 py-1.5 text-sm font-medium text-green-300 transition-colors hover:bg-green-400/20"
             >
               Create New Plant
             </button>
           </div>
-        </div>
 
-        {error ? <p className="mb-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">{error}</p> : null}
+        {error ? <p className="mb-4 bg-red-400/20 text-red-300 border border-red-400/50 rounded-full px-3 py-1 text-sm">{error}</p> : null}
 
         {showForm ? (
-          <form onSubmit={handleCreatePlant} className="mb-6 rounded-2xl bg-white p-6 shadow ring-1 ring-emerald-100">
+          <form onSubmit={handleCreatePlant} className="mb-6 rounded-2xl border border-emerald-200/70 bg-linear-to-br from-emerald-200/35 to-lime-200/30 p-6 text-white shadow-sm transition-shadow hover:shadow-lg ring-1 ring-emerald-100">
             <div className="grid gap-4 md:grid-cols-2">
               <div className="md:col-span-2">
-                <label className="mb-1 block text-sm font-medium text-gray-700">Title *</label>
+                <label className="mb-1 block text-sm font-medium text-white">Title *</label>
                 <input
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
@@ -177,7 +175,7 @@ function MyPlantsPage() {
                 />
               </div>
               <div className="md:col-span-2">
-                <label className="mb-1 block text-sm font-medium text-gray-700">Description</label>
+                <label className="mb-1 block text-sm font-medium text-white">Description</label>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
@@ -186,7 +184,7 @@ function MyPlantsPage() {
                 />
               </div>
               <div className="md:col-span-2">
-                <label className="mb-1 block text-sm font-medium text-gray-700">Image</label>
+                <label className="mb-1 block text-sm font-medium text-white">Image</label>
                 <input
                   type="file"
                   accept="image/*"
@@ -198,25 +196,25 @@ function MyPlantsPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="mt-4 rounded-xl bg-emerald-600 px-4 py-2 font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
+              className="mt-4 border border-green-400 text-green-300 hover:bg-green-400/20 px-3 py-1.5 text-sm rounded-full font-medium transition-colors"
             >
               {submitting ? 'Saving...' : 'Save Plant'}
             </button>
           </form>
         ) : null}
 
-        <div className="rounded-2xl bg-white p-6 shadow ring-1 ring-emerald-100">
-          <h2 className="mb-4 text-xl font-semibold text-emerald-900">My Plants</h2>
+        <div className="rounded-2xl p-6 shadow ring-1 ring-emerald-100">
+          <h2 className="mb-4 text-xl font-semibold text-emerald-200">My Plants</h2>
 
           <div className="space-y-3">
             {loading ? <p className="text-gray-600">Loading plants...</p> : null}
             {!loading && plants.length === 0 ? <p className="text-gray-600">No plants found.</p> : null}
 
             {plants.map((plant) => (
-              <div key={plant.id} className="rounded-xl border border-emerald-100 p-4">
+              <div key={plant.id} className="rounded-xl border border-emerald-200/70 bg-linear-to-br from-emerald-200/35 to-lime-200/30 p-4 text-white shadow-sm transition-shadow hover:shadow-lg">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <h2 className="text-xl font-semibold text-emerald-900">{plant.title}</h2>
+                    <h2 className="text-xl font-semibold text-white">{plant.title}</h2>
                     <div className="mt-2">
                       {plant.image_url ? (
                         <img
@@ -225,19 +223,19 @@ function MyPlantsPage() {
                           className="h-32 w-48 rounded-lg border border-gray-200 object-cover"
                         />
                       ) : (
-                        <p className="text-sm text-gray-500">No image</p>
+                        <p className="text-sm text-white/80">No image</p>
                       )}
                     </div>
-                    <p className="mt-2 text-sm text-gray-600">{plant.description || 'No description'}</p>
+                    <p className="mt-2 text-sm text-white/90">{plant.description || 'No description'}</p>
                     <div className="mt-3 flex flex-wrap gap-2 text-xs">
-                      <span className={`rounded-full px-3 py-1 ${getStatusClass(plant.status)}`}>Status: {plant.status}</span>
-                      <span className="rounded-full bg-gray-100 px-3 py-1 text-gray-700">
+                      <span className={getStatusClass(plant.status)}>Status: {plant.status}</span>
+                      <span className="bg-gray-400/20 text-gray-300 border border-gray-400/50 rounded-full px-3 py-1 text-sm">
                         Created: {plant.created_at ? new Date(plant.created_at).toLocaleString() : '-'}
                       </span>
                     </div>
 
                     {editingPlantId === plant.id ? (
-                      <form onSubmit={(event) => handleUpdatePlant(event, plant)} className="mt-4 space-y-3 rounded-xl border border-emerald-100 p-4">
+                      <form onSubmit={(event) => handleUpdatePlant(event, plant)} className="mt-4 space-y-3 rounded-xl border border-emerald-200/70 bg-linear-to-br from-emerald-200/35 to-lime-200/30 p-4 text-white shadow-sm transition-shadow hover:shadow-lg">
                         <input
                           value={editTitle}
                           onChange={(e) => setEditTitle(e.target.value)}
@@ -262,14 +260,14 @@ function MyPlantsPage() {
                           <button
                             type="submit"
                             disabled={submitting}
-                            className="rounded-xl bg-emerald-600 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
+                            className="border border-green-400 text-green-300 hover:bg-green-400/20 px-3 py-1.5 text-sm rounded-full font-medium transition-colors"
                           >
                             {submitting ? 'Saving...' : 'Save'}
                           </button>
                           <button
                             type="button"
                             onClick={handleCancelEdit}
-                            className="rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                            className="rounded-full border border-gray-400 px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-400/20"
                           >
                             Cancel
                           </button>
@@ -282,14 +280,14 @@ function MyPlantsPage() {
                     {plant.status === 'pending' ? (
                       <button
                         onClick={() => openEditForm(plant)}
-                        className="rounded-xl bg-amber-600 px-3 py-2 text-sm font-semibold text-white hover:bg-amber-700"
+                        className="rounded-full border border-gray-400 px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-400/20"
                       >
                         Edit
                       </button>
                     ) : null}
                     <button
                       onClick={() => handleDelete(plant.id)}
-                      className="rounded-xl bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-700"
+                      className="rounded-full border border-red-400 px-4 py-2 text-sm font-medium text-red-300 transition-colors hover:bg-red-400/20"
                     >
                       Delete
                     </button>
@@ -301,6 +299,7 @@ function MyPlantsPage() {
         </div>
       </div>
     </div>
+    </>
   )
 }
 

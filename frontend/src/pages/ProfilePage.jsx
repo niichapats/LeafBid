@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Link, Navigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
+import Navbar from '../components/Navbar.jsx'
 import api from '../utils/api.js'
 import { getUser } from '../utils/auth.js'
 
@@ -95,51 +96,45 @@ function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-emerald-50 via-white to-lime-50 px-4 py-8">
-      <div className="mx-auto max-w-3xl">
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-emerald-900">My Profile</h1>
-            <p className="mt-1 text-sm text-gray-600">Manage your account information</p>
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-mist-950 px-4 py-8">
+        <div className="mx-auto max-w-3xl">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-emerald-100">My Profile</h1>
+            <p className="mt-1 text-sm text-gray-300">Manage your account information</p>
           </div>
-          <Link
-            to="/dashboard"
-            className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-          >
-            Back to Dashboard
-          </Link>
-        </div>
 
         {error ? <p className="mb-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">{error}</p> : null}
         {success ? <p className="mb-4 rounded-xl bg-green-50 px-4 py-3 text-sm text-green-600">{success}</p> : null}
 
         {/* Profile Section */}
-        <div className="mb-6 rounded-2xl bg-white p-6 shadow ring-1 ring-emerald-100">
-          <h2 className="mb-4 text-xl font-semibold text-emerald-900">Profile Information</h2>
+        <div className="mb-6 rounded-2xl border border-emerald-200/70 bg-linear-to-br from-emerald-200/35 to-lime-200/30 p-6 text-white shadow-sm transition-shadow hover:shadow-lg ring-1 ring-emerald-100">
+          <h2 className="mb-4 text-xl font-semibold text-white">Profile Information</h2>
 
           {loading ? (
-            <p className="text-gray-600">Loading profile...</p>
+            <p className="text-white/90">Loading profile...</p>
           ) : profile ? (
             <>
               {!isEditing ? (
                 <div>
                   <div className="space-y-3">
                     <div>
-                      <label className="text-sm font-medium text-gray-600">Email</label>
-                      <p className="text-gray-900">{profile.email}</p>
+                      <label className="text-sm font-medium text-white/80">Email</label>
+                      <p className="text-white">{profile.email}</p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-600">Display Name</label>
-                      <p className="text-gray-900">{profile.display_name || 'Not set'}</p>
+                      <label className="text-sm font-medium text-white/80">Display Name</label>
+                      <p className="text-white">{profile.display_name || 'Not set'}</p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-600">Phone</label>
-                      <p className="text-gray-900">{profile.phone || 'Not set'}</p>
+                      <label className="text-sm font-medium text-white/80">Phone</label>
+                      <p className="text-white">{profile.phone || 'Not set'}</p>
                     </div>
                   </div>
                   <button
                     onClick={() => setIsEditing(true)}
-                    className="mt-4 rounded-xl bg-green-700 px-4 py-2 text-sm font-medium text-white hover:bg-green-800"
+                    className="mt-4 rounded-full border border-gray-400 px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-400/20"
                   >
                     Edit Profile
                   </button>
@@ -148,7 +143,7 @@ function ProfilePage() {
                 <form onSubmit={handleUpdateProfile}>
                   <div className="space-y-4">
                     <div>
-                      <label className="mb-1 block text-sm font-medium text-gray-700">Email</label>
+                      <label className="mb-1 block text-sm font-medium text-white">Email</label>
                       <input
                         type="email"
                         value={profile.email}
@@ -157,7 +152,7 @@ function ProfilePage() {
                       />
                     </div>
                     <div>
-                      <label className="mb-1 block text-sm font-medium text-gray-700">Display Name</label>
+                      <label className="mb-1 block text-sm font-medium text-white">Display Name</label>
                       <input
                         type="text"
                         value={displayName}
@@ -167,7 +162,7 @@ function ProfilePage() {
                       />
                     </div>
                     <div>
-                      <label className="mb-1 block text-sm font-medium text-gray-700">Phone</label>
+                      <label className="mb-1 block text-sm font-medium text-white">Phone</label>
                       <input
                         type="tel"
                         value={phone}
@@ -186,7 +181,7 @@ function ProfilePage() {
                     <button
                       type="submit"
                       disabled={submitting || !!phoneError}
-                      className="rounded-xl bg-green-700 px-4 py-2 text-sm font-medium text-white hover:bg-green-800 disabled:bg-gray-400"
+                      className="border border-green-400 text-green-300 hover:bg-green-400/20 px-3 py-1.5 text-sm rounded-full font-medium transition-colors"
                     >
                       {submitting ? 'Saving...' : 'Save Changes'}
                     </button>
@@ -198,7 +193,7 @@ function ProfilePage() {
                         setPhone(profile.phone || '')
                         setPhoneError(validatePhone(profile.phone || ''))
                       }}
-                      className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                      className="rounded-full border border-gray-400 px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-400/20"
                     >
                       Cancel
                     </button>
@@ -211,27 +206,27 @@ function ProfilePage() {
 
         {/* Won Auctions Section (Buyer Only) */}
         {user.role === 'buyer' ? (
-          <div className="rounded-2xl bg-white p-6 shadow ring-1 ring-emerald-100">
-            <h2 className="mb-4 text-xl font-semibold text-emerald-900">Won Auctions</h2>
+          <div className="rounded-2xl border border-emerald-200/70 bg-linear-to-br from-emerald-200/35 to-lime-200/30 p-6 text-white shadow-sm transition-shadow hover:shadow-lg ring-1 ring-emerald-100">
+            <h2 className="mb-4 text-xl font-semibold text-white">Won Auctions</h2>
 
             {wonAuctions.length === 0 ? (
-              <p className="text-gray-600">No won auctions yet.</p>
+              <p className="text-white/90">No won auctions yet.</p>
             ) : (
               <div className="space-y-3">
                 {wonAuctions.map((auction) => (
                   <Link
                     key={auction.id}
                     to={`/auctions/${auction.id}`}
-                    className="flex items-center justify-between rounded-xl border border-emerald-100 p-4 hover:bg-emerald-50"
+                    className="flex items-center justify-between rounded-xl border border-emerald-200/70 bg-linear-to-br from-emerald-200/35 to-lime-200/30 p-4 text-white shadow-sm transition-shadow hover:shadow-lg"
                   >
                     <div>
-                      <p className="font-semibold text-emerald-900">{auction.plant_title || `Plant #${auction.plant_id}`}</p>
-                      <p className="text-sm text-gray-600">Final price: {auction.current_price}</p>
-                      <p className="text-xs text-gray-500">
+                      <p className="font-semibold text-white">{auction.plant_title || `Plant #${auction.plant_id}`}</p>
+                      <p className="text-sm text-white/90">Final price: ฿{auction.current_price}</p>
+                      <p className="text-xs text-white/80">
                         Ended: {auction.end_time ? new Date(auction.end_time).toLocaleString() : '-'}
                       </p>
                     </div>
-                    <button className="rounded-xl bg-green-700 px-4 py-2 text-sm font-medium text-white hover:bg-green-800">
+                    <button className="rounded-full border border-green-400 px-4 py-2 text-sm font-medium text-green-300 transition-colors hover:bg-green-400/20">
                       View Room
                     </button>
                   </Link>
@@ -242,6 +237,7 @@ function ProfilePage() {
         ) : null}
       </div>
     </div>
+    </>
   )
 }
 

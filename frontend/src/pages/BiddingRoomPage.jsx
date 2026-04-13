@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, Navigate, useParams } from 'react-router-dom'
+import { Navigate, useParams } from 'react-router-dom'
 import { io } from 'socket.io-client'
+import Navbar from '../components/Navbar.jsx'
 import api from '../utils/api.js'
 import { getToken, getUser, isLoggedIn } from '../utils/auth.js'
 
@@ -136,31 +137,25 @@ function BiddingRoomPage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-emerald-50 via-white to-lime-50 px-4 py-8">
-      <div className="mx-auto max-w-5xl">
-        <div className="mb-6 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-emerald-900">Bidding Room</h1>
-            <p className="mt-1 text-sm text-gray-600">Real-time bidding for auction #{auctionId}</p>
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-mist-950 px-4 py-8">
+        <div className="mx-auto max-w-5xl">
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold text-emerald-100">Bidding Room</h1>
+            <p className="mt-1 text-sm text-gray-300">Real-time bidding for auction #{auctionId}</p>
           </div>
-          <Link
-            to="/auctions"
-            className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-          >
-            Back to Auctions
-          </Link>
-        </div>
 
-        {error ? <p className="mb-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">{error}</p> : null}
+        {error ? <p className="mb-4 bg-red-400/20 text-red-300 border border-red-400/50 rounded-full px-3 py-1 text-sm">{error}</p> : null}
 
         {user?.role === 'seller' ? (
-          <p className="mb-4 rounded-xl bg-yellow-100 px-4 py-3 text-sm text-yellow-800">
+          <p className="mb-4 bg-yellow-400/20 text-yellow-300 border border-yellow-400/50 rounded-full px-3 py-1 text-sm">
             You are viewing this auction as a seller. Bidding is not allowed.
           </p>
         ) : null}
 
-        <div className="mb-6 rounded-2xl bg-white p-6 shadow ring-1 ring-emerald-100">
-          {loading ? <p className="text-gray-600">Loading auction...</p> : null}
+        <div className="mb-6 rounded-2xl border border-emerald-200/70 bg-linear-to-br from-emerald-200/35 to-lime-200/30 p-6 text-white shadow-sm transition-shadow hover:shadow-lg ring-1 ring-emerald-100">
+          {loading ? <p className="text-white/90">Loading auction...</p> : null}
 
           {!loading && auction ? (
             <div>
@@ -168,23 +163,23 @@ function BiddingRoomPage() {
                 <img
                   src={`http://localhost:3000${auction.image_url}`}
                   alt={auction.plant_title}
-                  className="w-full object-contain rounded-lg mb-4 max-h-96 bg-gray-50"
+                  className="w-full object-contain rounded-lg mb-4 max-h-96 "
                 />
               ) : (
-                <div className="w-full h-64 bg-gray-100 rounded-lg mb-4 flex items-center justify-center text-gray-400">
+                <div className="w-full h-64 rounded-lg mb-4 flex items-center justify-center text-gray-400">
                   No image available
                 </div>
               )}
-              <h2 className="text-2xl font-semibold text-emerald-900">{auction.plant_title}</h2>
-              <div className="mt-2 rounded-lg bg-gray-50 p-3">
-                <p className="text-sm text-gray-700">Seller: {winner?.seller_email || '-'}</p>
+              <h2 className="text-2xl text-white">{auction.plant_title}</h2>
+              <div className="mt-2 rounded-lg bg-gray-50/20 p-3">
+                <p className="text-sm text-white">Seller: {winner?.seller_email || '-'}</p>
                 {winner?.seller_display_name ? (
-                  <p className="text-sm text-gray-700">Name: {winner.seller_display_name}</p>
+                  <p className="text-sm text-white">Name: {winner.seller_display_name}</p>
                 ) : null}
-                {winner?.seller_phone ? <p className="text-sm text-gray-700">Phone: {winner.seller_phone}</p> : null}
+                {winner?.seller_phone ? <p className="text-sm text-white">Phone: {winner.seller_phone}</p> : null}
               </div>
-              <p className="mt-2 text-sm text-gray-700">Current price: {auction.current_price}</p>
-              <p className="mt-1 text-sm text-gray-600">
+              <p className="mt-10 text-4xl text-white">Current price: ฿{auction.current_price}</p>
+              <p className="mt-10 text-sm text-white/90">
                 End time: {auction.end_time ? new Date(auction.end_time).toLocaleString() : '-'}
               </p>
             </div>
@@ -192,8 +187,8 @@ function BiddingRoomPage() {
         </div>
 
         {user?.role === 'buyer' ? (
-          <form onSubmit={handlePlaceBid} className="mb-6 rounded-2xl bg-white p-6 shadow ring-1 ring-emerald-100">
-            <label className="mb-2 block text-sm font-medium text-gray-700">Your bid amount</label>
+          <form onSubmit={handlePlaceBid} className="mb-6 rounded-2xl border border-emerald-200/70 bg-linear-to-br from-emerald-200/35 to-lime-200/30 p-6 text-white shadow-sm transition-shadow hover:shadow-lg ring-1 ring-emerald-100">
+            <label className="mb-2 block text-sm font-medium text-white">Your bid amount</label>
             <div className="flex gap-2">
               <input
                 type="number"
@@ -206,7 +201,7 @@ function BiddingRoomPage() {
               />
               <button
                 type="submit"
-                className="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700"
+                className="rounded-full bg-green-700 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-600"
               >
                 Place Bid
               </button>
@@ -217,53 +212,53 @@ function BiddingRoomPage() {
         {!loading && auction?.status === 'ended' ? (
           <div className="mb-6">
             {loadingWinner ? (
-              <div className="rounded-2xl bg-gray-100 p-6 text-center text-gray-600">
+              <div className="rounded-2xl border border-emerald-200/70 bg-linear-to-br from-emerald-200/35 to-lime-200/30 p-6 text-center text-white shadow-sm transition-shadow hover:shadow-lg">
                 Loading auction results...
               </div>
             ) : winner?.winner_email ? (
-              <div className="rounded-2xl bg-blue-50 p-6 ring-1 ring-blue-200">
-                <p className="text-lg font-semibold text-blue-800">Auction Ended!</p>
-                <p className="mt-2 text-sm text-blue-800">Winner: {winner.winner_email}</p>
+              <div className="rounded-2xl border border-emerald-200/70 bg-linear-to-br from-emerald-200/35 to-lime-200/30 p-6 text-white shadow-sm transition-shadow hover:shadow-lg ring-1 ring-emerald-100">
+                <p className="text-lg font-semibold text-white">Auction Ended!</p>
+                <p className="mt-2 text-sm text-white">Winner: {winner.winner_email}</p>
                 {winner.winner_display_name ? (
-                  <p className="text-sm text-blue-800">Name: {winner.winner_display_name}</p>
+                  <p className="text-sm text-white">Name: {winner.winner_display_name}</p>
                 ) : null}
 
                 {user?.userId === auction?.winner_id ? (
-                  <p className="mt-3 text-sm font-semibold text-blue-800">Congratulations! You won this auction.</p>
+                  <p className="mt-3 text-sm font-semibold text-white">Congratulations! You won this auction.</p>
                 ) : null}
 
                 {user?.role === 'seller' ? (
-                  <div className="mt-3 rounded-lg bg-blue-100 p-3">
-                    <p className="text-sm font-semibold text-blue-800">Winner Contact Information:</p>
-                    <p className="text-sm text-blue-800">Email: {winner.winner_email}</p>
+                  <div className="mt-3 rounded-lg bg-white/20 p-3">
+                    <p className="text-sm font-semibold text-white">Winner Contact Information:</p>
+                    <p className="text-sm text-white">Email: {winner.winner_email}</p>
                     {winner.winner_display_name ? (
-                      <p className="text-sm text-blue-800">Name: {winner.winner_display_name}</p>
+                      <p className="text-sm text-white">Name: {winner.winner_display_name}</p>
                     ) : null}
                     {winner.winner_phone ? (
-                      <p className="text-sm text-blue-800">Phone: {winner.winner_phone}</p>
+                      <p className="text-sm text-white">Phone: {winner.winner_phone}</p>
                     ) : null}
                   </div>
                 ) : null}
               </div>
             ) : (
-              <div className="rounded-2xl bg-gray-100 p-6 ring-1 ring-gray-300">
-                <p className="font-semibold text-gray-900">Auction ended with no bids</p>
+              <div className="rounded-2xl border border-emerald-200/70 bg-linear-to-br from-emerald-200/35 to-lime-200/30 p-6 text-white shadow-sm transition-shadow hover:shadow-lg ring-1 ring-emerald-100">
+                <p className="font-semibold text-white">Auction ended with no bids</p>
               </div>
             )}
           </div>
         ) : null}
 
-        <div className="rounded-2xl bg-white p-6 shadow ring-1 ring-emerald-100">
-          <h3 className="mb-4 text-lg font-semibold text-emerald-900">Bid History</h3>
+        <div className="rounded-2xl border border-emerald-200/70 bg-linear-to-br from-emerald-200/35 to-lime-200/30 p-6 text-white shadow-sm transition-shadow hover:shadow-lg ring-1 ring-emerald-100">
+          <h3 className="mb-4 text-lg font-semibold text-white">Bid History</h3>
 
-          {bidHistory.length === 0 ? <p className="text-gray-600">No bids yet.</p> : null}
+          {bidHistory.length === 0 ? <p className="text-white/90">No bids yet.</p> : null}
 
           <div className="space-y-3">
             {bidHistory.map((bid, index) => (
-              <div key={`${bid.placed_at || bid.placedAt}-${index}`} className="rounded-xl border border-emerald-100 p-3">
-                <p className="text-sm font-semibold text-emerald-900">Amount: {bid.amount}</p>
-                <p className="text-xs text-gray-600">Buyer: {bid.buyerEmail}</p>
-                <p className="text-xs text-gray-500">
+              <div key={`${bid.placed_at || bid.placedAt}-${index}`} className="rounded-xl border border-emerald-200/70 bg-linear-to-br from-emerald-200/35 to-lime-200/30 p-3 text-white shadow-sm transition-shadow hover:shadow-lg">
+                <p className="text-sm font-semibold text-white">Amount: {bid.amount}</p>
+                <p className="text-xs text-white/90">Buyer: {bid.buyerEmail}</p>
+                <p className="text-xs text-white/80">
                   {(() => {
                     const time = bid.placed_at || bid.placedAt
                     return `Placed at: ${time ? new Date(time).toLocaleString() : '-'}`
@@ -275,6 +270,7 @@ function BiddingRoomPage() {
         </div>
       </div>
     </div>
+    </>
   )
 }
 

@@ -78,7 +78,7 @@ function RegisterPage() {
     try {
       const response = await api.post('/auth/register', { email, password, role, displayName, phone })
       saveToken(response.data.token)
-      navigate('/dashboard')
+      navigate('/')
     } catch (err) {
       setError(err.response?.data?.error || 'Registration failed')
     } finally {
@@ -87,16 +87,16 @@ function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-lime-50 via-white to-emerald-50 flex items-center justify-center px-4">
-      <div className="w-full max-w-md rounded-3xl bg-white p-8 shadow-xl ring-1 ring-emerald-100">
+    <div className="min-h-screen bg-mist-950 flex items-center justify-center px-4">
+      <div className="w-full max-w-md rounded-3xl border border-emerald-200/70 bg-linear-to-br from-emerald-200/35 to-lime-200/30 p-8 text-white shadow-sm transition-shadow hover:shadow-lg ring-1 ring-emerald-100">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-emerald-900">Create account</h1>
-          <p className="mt-2 text-sm text-gray-600">Join LeafBid as a buyer or seller</p>
+          <h1 className="text-3xl font-bold text-white">Create account</h1>
+          <p className="mt-2 text-sm text-white/90">Join LeafBid as a buyer or seller</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">Full Name</label>
+            <label className="mb-1 block text-sm font-medium text-white">Full Name</label>
             <input
               type="text"
               value={displayName}
@@ -109,7 +109,7 @@ function RegisterPage() {
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">Phone Number</label>
+            <label className="mb-1 block text-sm font-medium text-white">Phone Number</label>
             <input
               type="text"
               value={phone}
@@ -122,7 +122,7 @@ function RegisterPage() {
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">Email</label>
+            <label className="mb-1 block text-sm font-medium text-white">Email</label>
             <input
               type="email"
               value={email}
@@ -135,7 +135,7 @@ function RegisterPage() {
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">Password</label>
+            <label className="mb-1 block text-sm font-medium text-white">Password</label>
             <input
               type="password"
               value={password}
@@ -148,7 +148,7 @@ function RegisterPage() {
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">Role</label>
+            <label className="mb-1 block text-sm font-medium text-white">Role</label>
             <select
               value={role}
               onChange={(e) => setRole(e.target.value)}
@@ -170,7 +170,7 @@ function RegisterPage() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-gray-600">
+        <p className="mt-6 text-center text-sm text-white/90">
           Already have an account?{' '}
           <Link to="/login" className="font-medium text-emerald-700 hover:text-emerald-800">
             Login

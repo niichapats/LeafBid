@@ -1,68 +1,113 @@
-import { Link, Navigate, useNavigate } from 'react-router-dom'
-import { getUser, removeToken } from '../utils/auth.js'
+import { useEffect, useState } from 'react'
+import { Navigate, useNavigate } from 'react-router-dom'
+import Navbar from '../components/Navbar.jsx'
+import api from '../utils/api.js'
+import { getUser } from '../utils/auth.js'
 
 function DashboardPage() {
   const navigate = useNavigate()
   const user = getUser()
+  const [auctions, setAuctions] = useState([])
+  const [profile, setProfile] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
   if (!user) {
     return <Navigate to="/login" replace />
   }
 
-  const handleLogout = () => {
-    removeToken()
-    navigate('/login')
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true)
+        setError('')
+        const [auctionsRes, profileRes] = await Promise.all([
+          api.get('/auctions'),
+          api.get('/profile')
+        ])
+        const activeAuctions = (auctionsRes.data || []).filter((auction) => auction.status === 'active')
+        setAuctions(activeAuctions)
+        setProfile(profileRes.data)
+      } catch (err) {
+        setError(err.response?.data?.error || 'Failed to load data')
+        console.error('Error fetching data:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
 
-  const menus = {
-    seller: [
-      { label: 'My Profile', to: '/profile' },
-      { label: 'My Plants', to: '/my-plants' },
-      {
-        label: 'Auction Management',
-        to: '/create-auction',
-        description: 'Create and manage your plant auctions',
-      },
-      { label: 'Browse Auctions', to: '/auctions' },
-    ],
-    admin: [
-      { label: 'My Profile', to: '/profile' },
-      { label: 'Manage Plants', to: '/admin/plants' },
-      { label: 'Manage Auctions', to: '/admin/auctions' },
-    ],
-    buyer: [
-      { label: 'My Profile', to: '/profile' },
-      { label: 'Browse Auctions', to: '/auctions' },
-    ],
+    fetchData()
+  }, [])
+
+  const handleCardClick = (auctionId) => {
+    navigate(`/auctions/${auctionId}`)
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-emerald-50 via-white to-lime-50 px-4 py-10">
-      <div className="mx-auto max-w-5xl">
-        <div className="mb-8 flex items-center justify-between rounded-3xl bg-white p-6 shadow-xl ring-1 ring-emerald-100">
-          <div>
-            <h1 className="text-3xl font-bold text-emerald-900">Dashboard</h1>
-            <p className="mt-1 text-sm text-gray-600">Signed in as {user.email} ({user.role})</p>
+    <div className="min-h-screen bg-mist-950">
+      <Navbar />
+      
+      <div className="px-4 py-8">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-8">
+            <h1 className="text-4xl font-bold text-emerald-100">
+              Welcome back, {profile?.display_name || user.email}!
+            </h1>
+            <p className="mt-2 text-lg text-gray-300">Live Plant Auctions</p>
           </div>
-          <button
-            onClick={handleLogout}
-            className="rounded-xl bg-gray-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-gray-800"
-          >
-            Logout
-          </button>
-        </div>
 
-        <div className="grid gap-6 md:grid-cols-3">
-          {(menus[user.role] || []).map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-emerald-100 transition hover:-translate-y-1 hover:shadow-xl"
-            >
-              <h2 className="text-xl font-semibold text-emerald-900">{item.label}</h2>
-              <p className="mt-2 text-sm text-gray-600">{item.description || `Open ${item.label.toLowerCase()} section`}</p>
-            </Link>
-          ))}
+          {error ? (
+            <div className="mb-6 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">
+              {error}
+            </div>
+          ) : null}
+
+          {loading ? (
+            <div className="text-center py-12">
+              <p className="text-gray-300">Loading auctions...</p>
+            </div>
+          ) : null}
+
+          {!loading && auctions.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {auctions.map((auction) => (
+                <div
+                  key={auction.id}
+                  onClick={() => handleCardClick(auction.id)}
+                  className="rounded-lg border border-emerald-200/70 bg-linear-to-br from-emerald-200/35 to-lime-200/30 text-white overflow-hidden shadow-sm transition-shadow hover:shadow-lg cursor-pointer"
+                >
+                  {auction.image_url ? (
+                    <img
+                      src={`http://localhost:3000${auction.image_url}`}
+                      alt={auction.plant_title || 'Plant'}
+                      className="w-full h-64 object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-64 bg-gray-200 flex items-center justify-center text-gray-400">
+                      No image
+                    </div>
+                  )}
+
+                  <div className="p-4">
+                    <h3 className="text-lg font-semibold text-white line-clamp-2">{auction.plant_title || 'Untitled Plant'}</h3>
+
+                    <div className="mt-3 space-y-2">
+                      <p className="text-xl font-bold text-white">฿{Number(auction.current_price).toLocaleString()}</p>
+                      <p className="text-sm text-white/90">
+                        End time: {auction.end_time ? new Date(auction.end_time).toLocaleString() : '-'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : null}
+
+          {!loading && auctions.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-gray-300 text-lg">No active auctions at the moment</p>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

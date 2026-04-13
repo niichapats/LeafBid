@@ -18,7 +18,7 @@ function LoginPage() {
     try {
       const response = await api.post('/auth/login', { email, password })
       saveToken(response.data.token)
-      navigate('/dashboard')
+      navigate('/')
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed')
     } finally {
@@ -27,16 +27,16 @@ function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-lime-50 flex items-center justify-center px-4">
-      <div className="w-full max-w-md rounded-3xl bg-white p-8 shadow-xl ring-1 ring-emerald-100">
+    <div className="min-h-screen bg-mist-950 flex items-center justify-center px-4">
+      <div className="w-full max-w-md rounded-3xl border border-emerald-200/70 bg-linear-to-br from-emerald-200/35 to-lime-200/30 p-8 text-white shadow-sm transition-shadow hover:shadow-lg ring-1 ring-emerald-100">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-emerald-900">LeafBid</h1>
-          <p className="mt-2 text-sm text-gray-600">Sign in to continue bidding on rare plants</p>
+          <h1 className="text-3xl font-bold text-white">LeafBid</h1>
+          <p className="mt-2 text-sm text-white/90">Sign in to continue bidding on rare plants</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">Email</label>
+            <label className="mb-1 block text-sm font-medium text-white">Email</label>
             <input
               type="email"
               value={email}
@@ -48,7 +48,7 @@ function LoginPage() {
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">Password</label>
+            <label className="mb-1 block text-sm font-medium text-white">Password</label>
             <input
               type="password"
               value={password}
@@ -70,7 +70,7 @@ function LoginPage() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-gray-600">
+        <p className="mt-6 text-center text-sm text-white/90">
           Don’t have an account?{' '}
           <Link to="/register" className="font-medium text-emerald-700 hover:text-emerald-800">
             Register
