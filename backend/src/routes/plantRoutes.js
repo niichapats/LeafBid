@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { authenticate, authorize } from '../middleware/authMiddleware.js'
+import upload from '../middleware/uploadMiddleware.js'
 import {
   createPlantController,
   getMyPlantsController,
@@ -11,9 +12,9 @@ import {
 
 const router = Router()
 
-router.post('/', authenticate, authorize('seller'), createPlantController)
+router.post('/', authenticate, authorize('seller'), upload.single('image'), createPlantController)
 router.get('/my', authenticate, authorize('seller'), getMyPlantsController)
-router.put('/:id', authenticate, authorize('seller'), updateMyPlantController)
+router.put('/:id', authenticate, authorize('seller'), upload.single('image'), updateMyPlantController)
 router.delete('/:id', authenticate, authorize('seller'), deleteMyPlantController)
 
 router.get('/admin/pending', authenticate, authorize('admin'), getPendingPlantsController)

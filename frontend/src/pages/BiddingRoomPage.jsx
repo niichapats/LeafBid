@@ -164,6 +164,17 @@ function BiddingRoomPage() {
 
           {!loading && auction ? (
             <div>
+              {auction.image_url ? (
+                <img
+                  src={`http://localhost:3000${auction.image_url}`}
+                  alt={auction.plant_title}
+                  className="w-full object-contain rounded-lg mb-4 max-h-96 bg-gray-50"
+                />
+              ) : (
+                <div className="w-full h-64 bg-gray-100 rounded-lg mb-4 flex items-center justify-center text-gray-400">
+                  No image available
+                </div>
+              )}
               <h2 className="text-2xl font-semibold text-emerald-900">{auction.plant_title}</h2>
               <div className="mt-2 rounded-lg bg-gray-50 p-3">
                 <p className="text-sm text-gray-700">Seller: {winner?.seller_email || '-'}</p>

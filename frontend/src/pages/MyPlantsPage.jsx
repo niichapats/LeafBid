@@ -11,7 +11,11 @@ function MyPlantsPage() {
   const [showForm, setShowForm] = useState(false)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
-  const [imageUrl, setImageUrl] = useState('')
+  const [imageFile, setImageFile] = useState(null)
+  const [editingPlantId, setEditingPlantId] = useState(null)
+  const [editTitle, setEditTitle] = useState('')
+  const [editDescription, setEditDescription] = useState('')
+  const [editImageFile, setEditImageFile] = useState(null)
   const [submitting, setSubmitting] = useState(false)
 
   if (!user || user.role !== 'seller') {
@@ -45,18 +49,71 @@ function MyPlantsPage() {
     try {
       setSubmitting(true)
       setError('')
-      await api.post('/plants', {
-        title,
-        description,
-        imageUrl,
+
+      const formData = new FormData()
+      formData.append('title', title)
+      formData.append('description', description)
+      if (imageFile) {
+        formData.append('image', imageFile)
+      }
+
+      await api.post('/plants', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       })
+
       setTitle('')
       setDescription('')
-      setImageUrl('')
+      setImageFile(null)
       setShowForm(false)
       await loadPlants()
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to create plant')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const openEditForm = (plant) => {
+    setEditingPlantId(plant.id)
+    setEditTitle(plant.title || '')
+    setEditDescription(plant.description || '')
+    setEditImageFile(null)
+  }
+
+  const handleCancelEdit = () => {
+    setEditingPlantId(null)
+    setEditTitle('')
+    setEditDescription('')
+    setEditImageFile(null)
+  }
+
+  const handleUpdatePlant = async (event, plant) => {
+    event.preventDefault()
+    if (!editTitle.trim()) {
+      setError('Title is required')
+      return
+    }
+
+    try {
+      setSubmitting(true)
+      setError('')
+
+      const formData = new FormData()
+      formData.append('title', editTitle)
+      formData.append('description', editDescription)
+      formData.append('imageUrl', plant.image_url || '')
+      if (editImageFile) {
+        formData.append('image', editImageFile)
+      }
+
+      await api.put(`/plants/${plant.id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+
+      handleCancelEdit()
+      await loadPlants()
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to update plant')
     } finally {
       setSubmitting(false)
     }
@@ -129,10 +186,11 @@ function MyPlantsPage() {
                 />
               </div>
               <div className="md:col-span-2">
-                <label className="mb-1 block text-sm font-medium text-gray-700">Image URL</label>
+                <label className="mb-1 block text-sm font-medium text-gray-700">Image</label>
                 <input
-                  value={imageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setImageFile(e.target.files?.[0] || null)}
                   className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
                 />
               </div>
@@ -156,6 +214,17 @@ function MyPlantsPage() {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <h2 className="text-xl font-semibold text-emerald-900">{plant.title}</h2>
+                  <div className="mt-2">
+                    {plant.image_url ? (
+                      <img
+                        src={`http://localhost:3000${plant.image_url}`}
+                        alt={plant.title}
+                        className="h-32 w-48 rounded-lg border border-gray-200 object-cover"
+                      />
+                    ) : (
+                      <p className="text-sm text-gray-500">No image</p>
+                    )}
+                  </div>
                   <p className="mt-2 text-sm text-gray-600">{plant.description || 'No description'}</p>
                   <div className="mt-3 flex flex-wrap gap-2 text-xs">
                     <span className={`rounded-full px-3 py-1 ${getStatusClass(plant.status)}`}>Status: {plant.status}</span>
@@ -163,14 +232,65 @@ function MyPlantsPage() {
                       Created: {plant.created_at ? new Date(plant.created_at).toLocaleString() : '-'}
                     </span>
                   </div>
+
+                  {editingPlantId === plant.id ? (
+                    <form onSubmit={(event) => handleUpdatePlant(event, plant)} className="mt-4 space-y-3 rounded-xl border border-emerald-100 p-4">
+                      <input
+                        value={editTitle}
+                        onChange={(e) => setEditTitle(e.target.value)}
+                        className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
+                        placeholder="Title"
+                        required
+                      />
+                      <textarea
+                        value={editDescription}
+                        onChange={(e) => setEditDescription(e.target.value)}
+                        className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
+                        rows={3}
+                        placeholder="Description"
+                      />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setEditImageFile(e.target.files?.[0] || null)}
+                        className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
+                      />
+                      <div className="flex gap-2">
+                        <button
+                          type="submit"
+                          disabled={submitting}
+                          className="rounded-xl bg-emerald-600 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
+                        >
+                          {submitting ? 'Saving...' : 'Save'}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleCancelEdit}
+                          className="rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </form>
+                  ) : null}
                 </div>
 
-                <button
-                  onClick={() => handleDelete(plant.id)}
-                  className="rounded-xl bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-700"
-                >
-                  Delete
-                </button>
+                <div className="flex gap-2">
+                  {plant.status === 'pending' ? (
+                    <button
+                      onClick={() => openEditForm(plant)}
+                      className="rounded-xl bg-amber-600 px-3 py-2 text-sm font-semibold text-white hover:bg-amber-700"
+                    >
+                      Edit
+                    </button>
+                  ) : null}
+                  <button
+                    onClick={() => handleDelete(plant.id)}
+                    className="rounded-xl bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-700"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
           ))}

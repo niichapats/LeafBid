@@ -8,7 +8,8 @@ import {
 } from '../services/plantService.js'
 
 export async function createPlantController(req, res) {
-  const { title, description, imageUrl } = req.body
+  const { title, description } = req.body
+  const imageUrl = req.file ? `/uploads/${req.file.filename}` : null
 
   if (!title) {
     return res.status(400).json({ error: 'Title is required' })
@@ -38,7 +39,8 @@ export async function getMyPlantsController(req, res) {
 export async function updateMyPlantController(req, res) {
   const plantId = req.params.id
   const sellerId = req.user.userId
-  const { title, description, imageUrl } = req.body
+  const { title, description, imageUrl: existingImageUrl } = req.body
+  const imageUrl = req.file ? `/uploads/${req.file.filename}` : existingImageUrl
 
   try {
     const result = await updateMyPlant(plantId, sellerId, title, description, imageUrl)

@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Link, Navigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import api from '../utils/api.js'
 import { isLoggedIn } from '../utils/auth.js'
 
 function AuctionsPage() {
+  const navigate = useNavigate()
   const [auctions, setAuctions] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -52,23 +53,34 @@ function AuctionsPage() {
           {!loading && auctions.length === 0 ? <p className="text-gray-600">No active auctions</p> : null}
 
           {auctions.map((auction) => (
-            <div key={auction.id} className="rounded-2xl bg-white p-5 shadow ring-1 ring-emerald-100">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <h2 className="text-xl font-semibold text-emerald-900">{auction.plant_title}</h2>
-                  <p className="mt-2 text-sm text-gray-600">Current price: {auction.current_price}</p>
-                  <p className="mt-1 text-sm text-gray-600">
-                    End time: {auction.end_time ? new Date(auction.end_time).toLocaleString() : '-'}
-                  </p>
-                  <p className="mt-1 text-xs text-gray-500">Status: {auction.status}</p>
-                </div>
+            <div
+              key={auction.id}
+              onClick={() => navigate(`/auctions/${auction.id}`)}
+              className="rounded-2xl bg-white p-5 shadow ring-1 ring-emerald-100 cursor-pointer hover:shadow-md transition-shadow"
+            >
+              <div className="flex items-start gap-4">
+                {auction.image_url ? (
+                  <img
+                    src={`http://localhost:3000${auction.image_url}`}
+                    alt={auction.plant_title}
+                    className="w-40 h-40 object-cover rounded-lg shrink-0"
+                  />
+                ) : (
+                  <div className="w-40 h-40 bg-gray-100 rounded-lg shrink-0 flex items-center justify-center text-gray-400">
+                    No image
+                  </div>
+                )}
 
-                <Link
-                  to={`/auctions/${auction.id}`}
-                  className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700"
-                >
-                  Join Auction
-                </Link>
+                <div className="flex-1">
+                  <div>
+                    <h2 className="text-xl font-semibold text-emerald-900">{auction.plant_title}</h2>
+                    <p className="mt-2 text-sm text-gray-600">Current price: {auction.current_price}</p>
+                    <p className="mt-1 text-sm text-gray-600">
+                      End time: {auction.end_time ? new Date(auction.end_time).toLocaleString() : '-'}
+                    </p>
+                    <p className="mt-1 text-xs text-gray-500">Status: {auction.status}</p>
+                  </div>
+                </div>
               </div>
             </div>
           ))}

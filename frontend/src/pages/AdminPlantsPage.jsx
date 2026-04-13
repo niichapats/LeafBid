@@ -65,6 +65,17 @@ function AdminPlantsPage() {
           {plants.map((plant) => (
             <div key={plant.id} className="rounded-2xl bg-white p-5 shadow ring-1 ring-emerald-100">
               <h2 className="text-xl font-semibold text-emerald-900">{plant.title}</h2>
+              <div className="mt-2">
+                {plant.image_url ? (
+                  <img
+                    src={`http://localhost:3000${plant.image_url}`}
+                    alt={plant.title}
+                    className="h-32 w-48 rounded-lg border border-gray-200 object-cover"
+                  />
+                ) : (
+                  <p className="text-sm text-gray-500">No image</p>
+                )}
+              </div>
               <p className="mt-2 text-sm text-gray-600">{plant.description || 'No description'}</p>
               <p className="mt-2 text-sm text-gray-700">Seller: {plant.seller_email}</p>
               <p className="mt-1 text-xs text-gray-500">

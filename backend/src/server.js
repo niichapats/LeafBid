@@ -5,6 +5,9 @@ import express from 'express'
 import cors from 'cors'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import pool from './database/db.js'
 import authRoutes from './routes/authRoutes.js'
 import plantRoutes from './routes/plantRoutes.js'
@@ -12,6 +15,12 @@ import auctionRoutes from './routes/auctionRoutes.js'
 import profileRoutes from './routes/profileRoutes.js'
 import initSocket from './socket/socketHandler.js'
 import { initScheduler } from './scheduler/auctionScheduler.js'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const uploadsPath = path.join(__dirname, '..', 'uploads')
+
+fs.mkdirSync(uploadsPath, { recursive: true })
 
 const app = express()
 const httpServer = createServer(app)
@@ -21,6 +30,7 @@ initSocket(io)
 
 app.use(cors({ origin: 'http://localhost:5173', credentials: true }))
 app.use(express.json())
+app.use('/uploads', express.static(uploadsPath))
 app.use('/api/auth', authRoutes)
 app.use('/api/plants', plantRoutes)
 app.use('/api/auctions', auctionRoutes)
