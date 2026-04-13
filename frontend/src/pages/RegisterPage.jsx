@@ -91,7 +91,7 @@ function RegisterPage() {
       <div className="w-full max-w-md rounded-3xl bg-white p-8 shadow-xl ring-1 ring-emerald-100">
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-emerald-900">Create account</h1>
-          <p className="mt-2 text-sm text-gray-600">Join LeafBid as a buyer, seller, or admin</p>
+          <p className="mt-2 text-sm text-gray-600">Join LeafBid as a buyer or seller</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -156,7 +156,6 @@ function RegisterPage() {
             >
               <option value="buyer">Buyer</option>
               <option value="seller">Seller</option>
-              <option value="admin">Admin</option>
             </select>
           </div>
 

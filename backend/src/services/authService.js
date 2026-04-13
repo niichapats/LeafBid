@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { findByEmail, createUser } from '../models/userModel.js'
 
-const VALID_ROLES = ['buyer', 'seller', 'admin']
+const VALID_ROLES = ['buyer', 'seller']
 const SALT_ROUNDS = 10
 const TOKEN_EXPIRES_IN = '7d'
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
