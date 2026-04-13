@@ -1,4 +1,5 @@
 import { getPlantById } from '../models/plantModel.js'
+import { getBidsByAuction } from '../models/bidModel.js'
 import {
   createAuction as createAuctionModel,
   getAuctionById as getAuctionByIdModel,
@@ -54,6 +55,10 @@ export async function getAuctionById(auctionId) {
     throw new Error('Auction not found')
   }
   return auction
+}
+
+export async function getBidHistory(auctionId) {
+  return getBidsByAuction(auctionId)
 }
 
 export async function startAuction(auctionId, sellerId) {

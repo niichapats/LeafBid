@@ -31,6 +31,19 @@ function BiddingRoomPage() {
         setAuction(response.data)
 
         try {
+          const bidHistoryResponse = await api.get(`/auctions/${auctionId}/bids`)
+          const initialHistory = bidHistoryResponse.data.map((bid) => ({
+            amount: bid.amount,
+            buyerEmail: bid.buyer_email,
+            placed_at: bid.placed_at,
+          }))
+          setBidHistory(initialHistory)
+        } catch (err) {
+          console.error('Failed to load bid history:', err)
+          setBidHistory([])
+        }
+
+        try {
           setLoadingWinner(true)
           const winnerResponse = await api.get(`/auctions/${auctionId}/winner`)
           setWinner(winnerResponse.data)
@@ -70,8 +83,8 @@ function BiddingRoomPage() {
       setError('')
     })
 
-    socket.on('bid_placed', (payload) => {
-      if (Number(payload.auctionId) !== Number(auctionId)) {
+    socket.on('bid_placed', (data) => {
+      if (Number(data.auctionId) !== Number(auctionId)) {
         return
       }
 
@@ -81,15 +94,15 @@ function BiddingRoomPage() {
         }
         return {
           ...prev,
-          current_price: payload.newPrice,
+          current_price: data.newPrice,
         }
       })
 
       setBidHistory((prev) => [
         {
-          amount: payload.amount,
-          buyerEmail: payload.buyerEmail,
-          placedAt: payload.placedAt,
+          amount: data.amount,
+          buyerEmail: data.buyerEmail,
+          placedAt: data.placedAt,
         },
         ...prev,
       ])
@@ -236,11 +249,14 @@ function BiddingRoomPage() {
 
           <div className="space-y-3">
             {bidHistory.map((bid, index) => (
-              <div key={`${bid.placedAt}-${index}`} className="rounded-xl border border-emerald-100 p-3">
+              <div key={`${bid.placed_at || bid.placedAt}-${index}`} className="rounded-xl border border-emerald-100 p-3">
                 <p className="text-sm font-semibold text-emerald-900">Amount: {bid.amount}</p>
                 <p className="text-xs text-gray-600">Buyer: {bid.buyerEmail}</p>
                 <p className="text-xs text-gray-500">
-                  Placed at: {bid.placedAt ? new Date(bid.placedAt).toLocaleString() : '-'}
+                  {(() => {
+                    const time = bid.placed_at || bid.placedAt
+                    return `Placed at: ${time ? new Date(time).toLocaleString() : '-'}`
+                  })()}
                 </p>
               </div>
             ))}

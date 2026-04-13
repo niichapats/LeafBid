@@ -3,6 +3,7 @@ import {
 	getActiveAuctions,
 	getMyAuctions,
 	getAuctionById,
+	getBidHistory,
 	startAuction,
 	endAuction,
 	deleteAuction,
@@ -56,6 +57,17 @@ export async function getAuctionByIdController(req, res) {
 		return res.status(200).json(result)
 	} catch (err) {
 		return res.status(404).json({ error: err.message })
+	}
+}
+
+export async function getBidHistoryController(req, res) {
+	const auctionId = req.params.id
+
+	try {
+		const result = await getBidHistory(auctionId)
+		return res.status(200).json(result)
+	} catch (err) {
+		return res.status(500).json({ error: err.message })
 	}
 }
 
