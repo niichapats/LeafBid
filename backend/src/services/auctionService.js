@@ -62,6 +62,15 @@ export async function startAuction(auctionId, sellerId) {
     throw new Error('Auction not found')
   }
 
+  const plant = await getPlantById(auction.plant_id)
+  if (!plant) {
+    throw new Error('Plant not found')
+  }
+
+  if (plant.seller_id !== Number(sellerId)) {
+    throw new Error('Unauthorized')
+  }
+
   return updateAuctionStatusModel(auctionId, 'active')
 }
 

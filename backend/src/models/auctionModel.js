@@ -121,7 +121,7 @@ export async function deleteAuction(auctionId) {
 
 export async function updateAuction(auctionId, sellerId, startPrice, startTime, endTime) {
   const result = await pool.query(
-    "UPDATE auctions SET start_price=$3, current_price=$3, start_time=$4, end_time=$5 WHERE id=$1 AND status='scheduled' RETURNING *",
+    "UPDATE auctions SET start_price=$3, current_price=$3, start_time=$4, end_time=$5 FROM plants WHERE auctions.id=$1 AND auctions.plant_id = plants.id AND plants.seller_id=$2 AND auctions.status='scheduled' RETURNING auctions.*",
     [auctionId, sellerId, startPrice, startTime, endTime]
   )
   return result.rows[0] || null
