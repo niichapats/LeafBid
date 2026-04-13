@@ -3,9 +3,12 @@ import {
   createAuction as createAuctionModel,
   getAuctionById as getAuctionByIdModel,
   getActiveAuctions as getActiveAuctionsModel,
+  getAllAuctionsBySeller as getAllAuctionsBySellerModel,
   placeBid as placeBidModel,
   endAuction as endAuctionModel,
   updateAuctionStatus as updateAuctionStatusModel,
+  deleteAuction as deleteAuctionModel,
+  updateAuction as updateAuctionModel,
 } from '../models/auctionModel.js'
 
 export async function createAuction(sellerId, plantId, startPrice, startTime, endTime) {
@@ -39,6 +42,10 @@ export async function getActiveAuctions() {
   return getActiveAuctionsModel()
 }
 
+export async function getMyAuctions(sellerId) {
+  return getAllAuctionsBySellerModel(sellerId)
+}
+
 export async function getAuctionById(auctionId) {
   const auction = await getAuctionByIdModel(auctionId)
   if (!auction) {
@@ -66,6 +73,33 @@ export async function placeBid(auctionId, buyerId, amount) {
 
 export async function endAuction(auctionId) {
   return endAuctionModel(auctionId)
+}
+
+export async function deleteAuction(auctionId) {
+  const auction = await deleteAuctionModel(auctionId)
+  if (!auction) {
+    throw new Error('Auction not found')
+  }
+  return auction
+}
+
+export async function updateAuction(auctionId, sellerId, startPrice, startTime, endTime) {
+  if (Number(startPrice) <= 0) {
+    throw new Error('Start price must be greater than 0')
+  }
+
+  const start = new Date(startTime)
+  const end = new Date(endTime)
+  if (!(end > start)) {
+    throw new Error('End time must be after start time')
+  }
+
+  const auction = await updateAuctionModel(auctionId, sellerId, startPrice, startTime, endTime)
+  if (!auction) {
+    throw new Error('Auction not found or already started')
+  }
+
+  return auction
 }
 
 export async function updateAuctionStatus(auctionId, status) {

@@ -1,9 +1,12 @@
 import {
 	createAuction,
 	getActiveAuctions,
+	getMyAuctions,
 	getAuctionById,
 	startAuction,
 	endAuction,
+	deleteAuction,
+	updateAuction,
 } from '../services/auctionService.js'
 
 export async function createAuctionController(req, res) {
@@ -26,6 +29,17 @@ export async function createAuctionController(req, res) {
 export async function getActiveAuctionsController(req, res) {
 	try {
 		const result = await getActiveAuctions()
+		return res.status(200).json(result)
+	} catch (err) {
+		return res.status(500).json({ error: err.message })
+	}
+}
+
+export async function getMyAuctionsController(req, res) {
+	const sellerId = req.user.userId
+
+	try {
+		const result = await getMyAuctions(sellerId)
 		return res.status(200).json(result)
 	} catch (err) {
 		return res.status(500).json({ error: err.message })
@@ -60,6 +74,30 @@ export async function endAuctionController(req, res) {
 
 	try {
 		const result = await endAuction(auctionId)
+		return res.status(200).json(result)
+	} catch (err) {
+		return res.status(400).json({ error: err.message })
+	}
+}
+
+export async function deleteAuctionController(req, res) {
+	const auctionId = req.params.id
+
+	try {
+		await deleteAuction(auctionId)
+		return res.status(200).json({ message: 'Auction deleted' })
+	} catch (err) {
+		return res.status(400).json({ error: err.message })
+	}
+}
+
+export async function updateAuctionController(req, res) {
+	const auctionId = req.params.id
+	const sellerId = req.user.userId
+	const { startPrice, startTime, endTime } = req.body
+
+	try {
+		const result = await updateAuction(auctionId, sellerId, startPrice, startTime, endTime)
 		return res.status(200).json(result)
 	} catch (err) {
 		return res.status(400).json({ error: err.message })

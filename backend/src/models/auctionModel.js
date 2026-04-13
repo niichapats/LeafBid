@@ -23,6 +23,14 @@ export async function getActiveAuctions() {
   return result.rows
 }
 
+export async function getAllAuctionsBySeller(sellerId) {
+  const result = await pool.query(
+    'SELECT auctions.*, plants.title as plant_title, plants.image_url FROM auctions JOIN plants ON auctions.plant_id = plants.id WHERE plants.seller_id = $1 ORDER BY auctions.id DESC',
+    [sellerId]
+  )
+  return result.rows
+}
+
 export async function placeBid(auctionId, buyerId, amount) {
   const client = await pool.connect()
   try {
@@ -87,5 +95,18 @@ export async function endAuction(auctionId) {
 
 export async function updateAuctionStatus(auctionId, status) {
   const result = await pool.query('UPDATE auctions SET status = $2 WHERE id = $1 RETURNING *', [auctionId, status])
+  return result.rows[0] || null
+}
+
+export async function deleteAuction(auctionId) {
+  const result = await pool.query('DELETE FROM auctions WHERE id = $1 RETURNING *', [auctionId])
+  return result.rows[0] || null
+}
+
+export async function updateAuction(auctionId, sellerId, startPrice, startTime, endTime) {
+  const result = await pool.query(
+    "UPDATE auctions SET start_price=$3, current_price=$3, start_time=$4, end_time=$5 WHERE id=$1 AND status='scheduled' RETURNING *",
+    [auctionId, sellerId, startPrice, startTime, endTime]
+  )
   return result.rows[0] || null
 }

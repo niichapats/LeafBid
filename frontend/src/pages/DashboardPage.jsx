@@ -18,13 +18,17 @@ function DashboardPage() {
     seller: [
       { label: 'My Plants', to: '/my-plants' },
       { label: 'Create Auction', to: '/create-auction' },
+      { label: 'Browse Auctions', to: '/auctions' },
     ],
-    admin: [{ label: 'Manage Plants', to: '/admin/plants' }],
+    admin: [
+      { label: 'Manage Plants', to: '/admin/plants' },
+      { label: 'Manage Auctions', to: '/admin/auctions' },
+    ],
     buyer: [{ label: 'Browse Auctions', to: '/auctions' }],
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-lime-50 px-4 py-10">
+    <div className="min-h-screen bg-linear-to-br from-emerald-50 via-white to-lime-50 px-4 py-10">
       <div className="mx-auto max-w-5xl">
         <div className="mb-8 flex items-center justify-between rounded-3xl bg-white p-6 shadow-xl ring-1 ring-emerald-100">
           <div>

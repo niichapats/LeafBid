@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link, Navigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import api from '../utils/api.js'
 import { getUser } from '../utils/auth.js'
 
 function CreateAuctionPage() {
+  const navigate = useNavigate()
   const user = getUser()
   const [plants, setPlants] = useState([])
   const [approvedPlants, setApprovedPlants] = useState([])
@@ -16,6 +17,10 @@ function CreateAuctionPage() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const [editingAuctionId, setEditingAuctionId] = useState(null)
+  const [editStartPrice, setEditStartPrice] = useState('')
+  const [editStartTime, setEditStartTime] = useState('')
+  const [editEndTime, setEditEndTime] = useState('')
 
   if (!user || user.role !== 'seller') {
     return <Navigate to="/dashboard" replace />
@@ -29,17 +34,14 @@ function CreateAuctionPage() {
       setError('')
       const [plantsRes, auctionsRes] = await Promise.all([
         api.get('/plants/my'),
-        api.get('/auctions').catch(() => ({ data: [] })),
+        api.get('/auctions/my').catch(() => ({ data: [] })),
       ])
 
       const myPlants = plantsRes.data
       const onlyApprovedPlants = myPlants.filter((plant) => plant.status === 'approved')
-      const approvedIds = new Set(onlyApprovedPlants.map((plant) => Number(plant.id)))
       setPlants(myPlants)
       setApprovedPlants(onlyApprovedPlants)
-
-      const visibleAuctions = (auctionsRes.data || []).filter((auction) => approvedIds.has(Number(auction.plant_id)))
-      setAuctions(visibleAuctions)
+      setAuctions(auctionsRes.data || [])
 
       if (!selectedPlantId && onlyApprovedPlants.length > 0) {
         setSelectedPlantId(String(onlyApprovedPlants[0].id))
@@ -93,15 +95,89 @@ function CreateAuctionPage() {
     try {
       setError('')
       setSuccess('')
-      const response = await api.patch(`/auctions/${auctionId}/start`)
-      const updatedAuction = response.data
-
-      setAuctions((previous) =>
-        previous.map((auction) => (Number(auction.id) === Number(updatedAuction.id) ? updatedAuction : auction))
-      )
+      await api.patch(`/auctions/${auctionId}/start`)
       setSuccess(`Auction ${auctionId} started`)
+      await loadData()
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to start auction')
+    }
+  }
+
+  const handleEndAuction = async (auctionId) => {
+    try {
+      setError('')
+      setSuccess('')
+      await api.patch(`/auctions/${auctionId}/end`)
+      setSuccess(`Auction ${auctionId} ended`)
+      await loadData()
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to end auction')
+    }
+  }
+
+  const formatDateTimeLocal = (value) => {
+    if (!value) {
+      return ''
+    }
+
+    const date = new Date(value)
+    const offset = date.getTimezoneOffset()
+    const local = new Date(date.getTime() - offset * 60 * 1000)
+    return local.toISOString().slice(0, 16)
+  }
+
+  const handleEditClick = (event, auction) => {
+    event.stopPropagation()
+    setEditingAuctionId(auction.id)
+    setEditStartPrice(String(auction.start_price ?? ''))
+    setEditStartTime(formatDateTimeLocal(auction.start_time))
+    setEditEndTime(formatDateTimeLocal(auction.end_time))
+  }
+
+  const handleCancelEdit = (event) => {
+    event.stopPropagation()
+    setEditingAuctionId(null)
+    setEditStartPrice('')
+    setEditStartTime('')
+    setEditEndTime('')
+  }
+
+  const handleUpdateAuction = async (event, auctionId) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    try {
+      setError('')
+      setSuccess('')
+      await api.put(`/auctions/${auctionId}`, {
+        startPrice: Number(editStartPrice),
+        startTime: editStartTime,
+        endTime: editEndTime,
+      })
+      setSuccess(`Auction ${auctionId} updated`)
+      setEditingAuctionId(null)
+      await loadData()
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to update auction')
+    }
+  }
+
+  const handleDeleteAuction = async (event, auctionId) => {
+    event.stopPropagation()
+
+    const confirmed = window.confirm('Are you sure?')
+    if (!confirmed) {
+      return
+    }
+
+    try {
+      setError('')
+      setSuccess('')
+      await api.delete(`/auctions/${auctionId}`)
+      setSuccess(`Auction ${auctionId} deleted`)
+      await loadData()
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to delete auction')
     }
   }
 
@@ -201,23 +277,155 @@ function CreateAuctionPage() {
 
           <div className="space-y-3">
             {auctions.map((auction) => (
-              <div key={auction.id} className="rounded-xl border border-emerald-100 p-4">
+              <div
+                key={auction.id}
+                className="cursor-pointer rounded-xl border border-emerald-100 p-4"
+                onClick={() => navigate(`/auctions/${auction.id}`)}
+              >
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
                     <p className="font-semibold text-emerald-900">{auction.plant_title || `Plant #${auction.plant_id}`}</p>
+                    <p className="text-sm text-gray-600">Auction #{auction.id}</p>
+                    <div className="mt-2">
+                      {auction.status === 'scheduled' ? (
+                        <span className="rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800">Scheduled</span>
+                      ) : null}
+                      {auction.status === 'active' ? (
+                        <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800">Active</span>
+                      ) : null}
+                      {auction.status === 'ended' ? (
+                        <span className="rounded-full bg-gray-200 px-3 py-1 text-xs font-medium text-gray-700">Ended</span>
+                      ) : null}
+                    </div>
+                    <p className="text-sm text-gray-600">Start price: {auction.start_price}</p>
+                    <p className="text-sm text-gray-600">Current price: {auction.current_price}</p>
                     <p className="text-sm text-gray-600">
-                      Auction #{auction.id} • Status: {auction.status || 'scheduled'} • Current price: {auction.current_price}
+                      Start time: {auction.start_time ? new Date(auction.start_time).toLocaleString() : '-'}
                     </p>
+                    <p className="text-sm text-gray-600">
+                      End time: {auction.end_time ? new Date(auction.end_time).toLocaleString() : '-'}
+                    </p>
+                    {auction.status === 'ended' ? (
+                      <p className="text-sm text-gray-700">
+                        Winner ID: {auction.winner_id ? auction.winner_id : 'No winner'}
+                      </p>
+                    ) : null}
                   </div>
 
-                  <button
-                    onClick={() => handleStartAuction(auction.id)}
-                    disabled={auction.status === 'active' || auction.status === 'ended'}
-                    className="rounded-lg bg-yellow-700 px-3 py-2 text-sm font-semibold text-white hover:bg-yellow-800 disabled:cursor-not-allowed disabled:opacity-60"
-                  >
-                    Start Auction
-                  </button>
+                  <div className="flex gap-2">
+                    {auction.status === 'scheduled' ? (
+                      <>
+                        <button
+                          onClick={(event) => {
+                            event.stopPropagation()
+                            handleStartAuction(auction.id)
+                          }}
+                          className="rounded bg-green-700 px-4 py-2 font-medium text-white hover:bg-green-800"
+                        >
+                          Start Auction
+                        </button>
+                        <button
+                          onClick={(event) => handleEditClick(event, auction)}
+                          className="rounded bg-yellow-700 px-4 py-2 font-medium text-white hover:bg-yellow-800"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={(event) => handleDeleteAuction(event, auction.id)}
+                          className="rounded bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700"
+                        >
+                          Delete
+                        </button>
+                      </>
+                    ) : null}
+
+                    {auction.status === 'active' ? (
+                      <>
+                        <button
+                          onClick={(event) => {
+                            event.stopPropagation()
+                            handleEndAuction(auction.id)
+                          }}
+                          className="rounded bg-yellow-700 px-4 py-2 font-medium text-white hover:bg-yellow-800"
+                        >
+                          End Auction
+                        </button>
+                        <button
+                          onClick={(event) => handleDeleteAuction(event, auction.id)}
+                          className="rounded bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700"
+                        >
+                          Delete
+                        </button>
+                      </>
+                    ) : null}
+
+                    {auction.status === 'ended' ? (
+                      <button
+                        onClick={(event) => handleDeleteAuction(event, auction.id)}
+                        className="rounded bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700"
+                      >
+                        Delete
+                      </button>
+                    ) : null}
+                  </div>
                 </div>
+
+                {editingAuctionId === auction.id ? (
+                  <form
+                    onSubmit={(event) => handleUpdateAuction(event, auction.id)}
+                    onClick={(event) => event.stopPropagation()}
+                    className="mt-4 grid gap-3 rounded-xl border border-yellow-200 bg-yellow-50 p-4 md:grid-cols-3"
+                  >
+                    <div>
+                      <label className="mb-1 block text-sm font-medium text-gray-700">Start Price</label>
+                      <input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value={editStartPrice}
+                        onChange={(e) => setEditStartPrice(e.target.value)}
+                        className="w-full rounded border border-gray-200 px-3 py-2 outline-none focus:border-yellow-600"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-1 block text-sm font-medium text-gray-700">Start Time</label>
+                      <input
+                        type="datetime-local"
+                        value={editStartTime}
+                        onChange={(e) => setEditStartTime(e.target.value)}
+                        className="w-full rounded border border-gray-200 px-3 py-2 outline-none focus:border-yellow-600"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-1 block text-sm font-medium text-gray-700">End Time</label>
+                      <input
+                        type="datetime-local"
+                        value={editEndTime}
+                        onChange={(e) => setEditEndTime(e.target.value)}
+                        className="w-full rounded border border-gray-200 px-3 py-2 outline-none focus:border-yellow-600"
+                        required
+                      />
+                    </div>
+
+                    <div className="md:col-span-3 flex gap-2">
+                      <button
+                        type="submit"
+                        className="rounded bg-yellow-700 px-4 py-2 font-medium text-white hover:bg-yellow-800"
+                      >
+                        Save
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleCancelEdit}
+                        className="rounded border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 hover:bg-gray-50"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                ) : null}
               </div>
             ))}
           </div>
