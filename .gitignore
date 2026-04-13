@@ -23,3 +23,6 @@ build/
 # OS / Editor
 .DS_Store
 .vscode/
+
+# Uploads folder
+uploads/
