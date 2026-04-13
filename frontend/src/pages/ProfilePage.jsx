@@ -3,6 +3,8 @@ import { Link, Navigate } from 'react-router-dom'
 import api from '../utils/api.js'
 import { getUser } from '../utils/auth.js'
 
+const phoneRegex = /^0[0-9]{8,9}$/
+
 function ProfilePage() {
   const user = getUser()
   const [profile, setProfile] = useState(null)
@@ -10,10 +12,18 @@ function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false)
   const [displayName, setDisplayName] = useState('')
   const [phone, setPhone] = useState('')
+  const [phoneError, setPhoneError] = useState('')
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+
+  const validatePhone = (value) => {
+    if (!value) {
+      return 'Use format 08XXXXXXXX or 02XXXXXXX'
+    }
+    return phoneRegex.test(value) ? '' : 'Use format 08XXXXXXXX or 02XXXXXXX'
+  }
 
   if (!user) {
     return <Navigate to="/login" replace />
@@ -28,6 +38,7 @@ function ProfilePage() {
         setProfile(response.data)
         setDisplayName(response.data.display_name || '')
         setPhone(response.data.phone || '')
+        setPhoneError(validatePhone(response.data.phone || ''))
       } catch (err) {
         setError(err.response?.data?.error || 'Failed to load profile')
       } finally {
@@ -57,6 +68,12 @@ function ProfilePage() {
 
   const handleUpdateProfile = async (event) => {
     event.preventDefault()
+
+    const currentPhoneError = validatePhone(phone)
+    setPhoneError(currentPhoneError)
+    if (currentPhoneError) {
+      return
+    }
 
     try {
       setSubmitting(true)
@@ -146,6 +163,7 @@ function ProfilePage() {
                         value={displayName}
                         onChange={(e) => setDisplayName(e.target.value)}
                         className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
+                        placeholder="First and Last Name"
                       />
                     </div>
                     <div>
@@ -153,15 +171,21 @@ function ProfilePage() {
                       <input
                         type="tel"
                         value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
+                        onChange={(e) => {
+                          const value = e.target.value
+                          setPhone(value)
+                          setPhoneError(validatePhone(value))
+                        }}
                         className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
+                        placeholder="08XXXXXXXX or 02XXXXXXX"
                       />
+                      {phoneError ? <p className="mt-1 text-sm text-red-600">{phoneError}</p> : null}
                     </div>
                   </div>
                   <div className="mt-4 flex gap-2">
                     <button
                       type="submit"
-                      disabled={submitting}
+                      disabled={submitting || !!phoneError}
                       className="rounded-xl bg-green-700 px-4 py-2 text-sm font-medium text-white hover:bg-green-800 disabled:bg-gray-400"
                     >
                       {submitting ? 'Saving...' : 'Save Changes'}
@@ -172,6 +196,7 @@ function ProfilePage() {
                         setIsEditing(false)
                         setDisplayName(profile.display_name || '')
                         setPhone(profile.phone || '')
+                        setPhoneError(validatePhone(profile.phone || ''))
                       }}
                       className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                     >

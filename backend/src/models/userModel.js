@@ -7,14 +7,14 @@ export async function findByEmail(email) {
   return result.rows[0] || null
 }
 
-export async function createUser(email, passwordHash, role) {
+export async function createUser(email, passwordHash, role, displayName, phone) {
   if (!VALID_ROLES.includes(role)) {
     throw new Error('Invalid role')
   }
 
   const result = await pool.query(
-    'INSERT INTO users (email, password_hash, role) VALUES ($1, $2, $3) RETURNING *',
-    [email, passwordHash, role]
+    'INSERT INTO users (email, password_hash, role, display_name, phone) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+    [email, passwordHash, role, displayName, phone]
   )
 
   return result.rows[0]

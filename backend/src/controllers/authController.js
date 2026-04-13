@@ -1,14 +1,14 @@
 import { register, login } from '../services/authService.js'
 
 export async function registerController(req, res) {
-  const { email, password, role } = req.body
+  const { email, password, role, displayName, phone } = req.body
 
-  if (!email || !password || !role) {
-    return res.status(400).json({ error: 'email, password, and role are required' })
+  if (!email || !password || !role || !displayName || !phone) {
+    return res.status(400).json({ error: 'All fields are required' })
   }
 
   try {
-    const token = await register(email, password, role)
+    const token = await register(email, password, role, displayName, phone)
     return res.status(201).json({ token })
   } catch (err) {
     return res.status(400).json({ error: err.message })
