@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken'
 import { placeBid } from '../services/auctionService.js'
 
+const bidTimestamps = new Map()
+
 export default function initSocket(io) {
   io.use((socket, next) => {
     try {
@@ -25,6 +27,17 @@ export default function initSocket(io) {
 
     socket.on('place_bid', async ({ auctionId, amount }) => {
       try {
+        const userId = socket.user.userId
+        const now = Date.now()
+        const last = bidTimestamps.get(userId) || 0
+
+        if (now - last < 1000) {
+          socket.emit('bid_error', { error: 'Please wait 1 second before placing another bid' })
+          return
+        }
+
+        bidTimestamps.set(userId, now)
+
         const buyerId = socket.user.userId
         const result = await placeBid(auctionId, buyerId, amount)
 
@@ -46,6 +59,7 @@ export default function initSocket(io) {
 
     socket.on('disconnect', () => {
       console.log('User disconnected:', socket.id)
+      bidTimestamps.delete(socket.user?.userId)
     })
   })
 }
