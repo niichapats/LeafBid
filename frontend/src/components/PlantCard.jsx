@@ -38,14 +38,14 @@ function PlantCard({
           {showEditButton ? (
             <button
               onClick={() => onEdit(plant)}
-              className="rounded-full border border-stone-200 px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-stone-100"
+              className="border border-yellow-500 text-yellow-600 hover:bg-yellow-50 rounded-full px-3 py-1.5 text-sm font-medium"
             >
               Edit
             </button>
           ) : null}
           <button
             onClick={() => onDelete(plant.id)}
-            className="rounded-full border border-rose-200 px-4 py-2 text-sm font-medium text-rose-600 transition-colors hover:bg-rose-50"
+            className="border border-red-400 text-red-500 hover:bg-red-50 rounded-full px-3 py-1.5 text-sm font-medium"
           >
             Delete
           </button>

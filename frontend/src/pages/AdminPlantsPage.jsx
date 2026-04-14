@@ -78,13 +78,13 @@ function AdminPlantsPage() {
               <div className="mt-4 flex gap-2">
                 <button
                   onClick={() => handleVerify(plant.id, 'approved')}
-                  className="rounded-full border border-emerald-200 px-4 py-2 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-50"
+                  className="border border-green-600 text-green-700 hover:bg-green-50 rounded-full px-3 py-1.5 text-sm font-medium"
                 >
                   Approve
                 </button>
                 <button
                   onClick={() => handleVerify(plant.id, 'rejected')}
-                  className="rounded-full border border-rose-200 px-4 py-2 text-sm font-medium text-rose-600 transition-colors hover:bg-rose-50"
+                  className="border border-red-400 text-red-500 hover:bg-red-50 rounded-full px-3 py-1.5 text-sm font-medium"
                 >
                   Reject
                 </button>

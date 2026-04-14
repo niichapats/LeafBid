@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Navigate, Link } from 'react-router-dom'
 import Navbar from '../components/Navbar.jsx'
 import PageHeader from '../components/PageHeader.jsx'
 import api from '../utils/api.js'
@@ -132,7 +132,7 @@ function ProfilePage() {
                   </div>
                   <button
                     onClick={() => setIsEditing(true)}
-                    className="mt-4 rounded-full border border-stone-200 px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-stone-100"
+                    className="mt-4 border border-yellow-500 text-yellow-600 hover:bg-yellow-50 rounded-full px-3 py-1.5 text-sm font-medium"
                   >
                     Edit Profile
                   </button>
@@ -179,7 +179,7 @@ function ProfilePage() {
                     <button
                       type="submit"
                       disabled={submitting || !!phoneError}
-                      className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700 disabled:opacity-60"
+                      className="border border-green-600 text-green-700 hover:bg-green-50 rounded-full px-3 py-1.5 text-sm font-medium disabled:opacity-60"
                     >
                       {submitting ? 'Saving...' : 'Save Changes'}
                     </button>
@@ -191,7 +191,7 @@ function ProfilePage() {
                         setPhone(profile.phone || '')
                         setPhoneError(validatePhone(profile.phone || ''))
                       }}
-                      className="rounded-full border border-stone-200 px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-stone-100"
+                      className="border border-gray-300 text-gray-600 hover:bg-gray-50 rounded-full px-3 py-1.5 text-sm font-medium"
                     >
                       Cancel
                     </button>
@@ -224,9 +224,6 @@ function ProfilePage() {
                         Ended: {auction.end_time ? new Date(auction.end_time).toLocaleString() : '-'}
                       </p>
                     </div>
-                    <button className="rounded-full border border-emerald-200 px-4 py-2 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-50">
-                      View Room
-                    </button>
                   </Link>
                 ))}
               </div>

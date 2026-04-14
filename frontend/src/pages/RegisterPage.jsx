@@ -167,7 +167,7 @@ function RegisterPage() {
           <button
             type="submit"
             disabled={loading || isFormInvalid}
-            className="w-full rounded-xl bg-emerald-600 px-4 py-3 font-semibold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full border border-emerald-200 bg-linear-to-r from-green-300 to-emerald-300 text-emerald-900 rounded-full px-3 py-1.5 text-sm font-medium hover:from-green-400 hover:to-emerald-400 disabled:opacity-60"
           >
             {loading ? 'Creating account...' : 'Register'}
           </button>

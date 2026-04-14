@@ -40,11 +40,11 @@ function Navbar() {
   const navLinks = getNavLinks()
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-stone-200 bg-white/90 px-6 py-3 backdrop-blur-md flex items-center gap-8">
+    <nav className="sticky top-0 z-50 border-b border-emerald-100 bg-linear-to-r from-emerald-100/60 to-lime-100/60 px-6 py-3 text-white backdrop-blur-md flex items-center gap-8">
       {/* Left: Logo */}
       <Link
         to="/"
-        className="text-xl font-bold text-emerald-700 hover:text-emerald-800 transition-colors shrink-0"
+        className="text-xl font-bold text-emerald-900 hover:text-emerald-950 transition-colors shrink-0"
       >
         LeafBid
       </Link>
@@ -55,7 +55,7 @@ function Navbar() {
           <Link
             key={link.href}
             to={link.href}
-            className="text-sm text-slate-600 hover:text-emerald-700 transition-colors"
+            className="text-sm text-emerald-900 hover:text-emerald-950 transition-colors"
           >
             {link.label}
           </Link>
@@ -65,17 +65,17 @@ function Navbar() {
       {/* Right: User Info and Logout */}
       <div className="flex items-center gap-4 shrink-0">
         <div className="hidden sm:block">
-          <p className="text-sm text-slate-600">{displayName}</p>
+          <p className="text-sm text-emerald-900">{displayName}</p>
         </div>
         <Link
           to="/profile"
-          className="text-sm text-slate-600 hover:text-emerald-700 transition-colors"
+          className="text-sm text-emerald-900 hover:text-emerald-950 transition-colors"
         >
           My Profile
         </Link>
         <button
           onClick={handleLogout}
-          className="rounded-full border border-rose-200 px-4 py-2 text-sm font-medium text-rose-600 transition-colors hover:bg-rose-50"
+          className="border border-gray-300 text-gray-600 hover:bg-lime-50/90 rounded-full px-3 py-1.5 text-sm font-medium"
         >
           Logout
         </button>

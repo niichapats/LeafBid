@@ -123,14 +123,14 @@ function AdminAuctionsPage() {
                     {auction.status === 'active' ? (
                       <button
                         onClick={() => handleEndAuction(auction.id)}
-                        className="rounded-full border border-amber-200 px-3 py-1.5 text-sm font-medium text-amber-700 transition-colors hover:bg-amber-50"
+                        className="border border-yellow-500 text-yellow-600 hover:bg-yellow-50 rounded-full px-3 py-1.5 text-sm font-medium"
                       >
                         End Auction
                       </button>
                     ) : null}
                     <button
                       onClick={() => handleDeleteAuction(auction.id)}
-                      className="rounded-full border border-rose-200 px-3 py-1.5 text-sm font-medium text-rose-600 transition-colors hover:bg-rose-50"
+                      className="border border-red-400 text-red-500 hover:bg-red-50 rounded-full px-3 py-1.5 text-sm font-medium"
                     >
                       Delete
                     </button>

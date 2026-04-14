@@ -185,7 +185,7 @@ function BiddingRoomPage() {
           ) : null}
         </div>
 
-        {user?.role === 'buyer' ? (
+        {user?.role === 'buyer' && auction?.status !== 'ended' ? (
           <form onSubmit={handlePlaceBid} className="mb-6 rounded-2xl border border-stone-200 bg-white p-6 text-slate-900 shadow-sm transition-shadow hover:shadow-md">
             <label className="mb-2 block text-sm font-medium text-slate-700">Your bid amount</label>
             <div className="flex gap-2">
@@ -200,7 +200,7 @@ function BiddingRoomPage() {
               />
               <button
                 type="submit"
-                className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
+                className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700 disabled:opacity-60"
               >
                 Place Bid
               </button>
@@ -217,22 +217,16 @@ function BiddingRoomPage() {
             ) : winner?.winner_email ? (
               <div className="rounded-2xl border border-stone-200 bg-white p-6 text-slate-900 shadow-sm transition-shadow hover:shadow-md">
                 <p className="text-lg font-semibold text-slate-900">Auction Ended!</p>
-                <p className="mt-2 text-sm text-slate-700">Winner: {winner.winner_email}</p>
-                {winner.winner_display_name ? (
-                  <p className="text-sm text-slate-700">Name: {winner.winner_display_name}</p>
-                ) : null}
+                <p className="mt-2 text-sm text-amber-800">Winner: {winner.winner_display_name}</p>
 
                 {user?.userId === auction?.winner_id ? (
-                  <p className="mt-3 text-sm font-semibold text-emerald-700">Congratulations! You won this auction.</p>
+                  <p className="mt-3 text-lg font-semibold text-amber-800">🏆 Congratulations! You won this auction.</p>
                 ) : null}
 
                 {user?.role === 'seller' ? (
-                  <div className="mt-3 rounded-xl border border-stone-200 bg-stone-50 p-3">
+                  <div className="mt-3 rounded-xl border border-yellow-100 bg-linear-to-r from-orange-100/60 to-yellow-100/60 p-3">
                     <p className="text-sm font-semibold text-slate-900">Winner Contact Information:</p>
                     <p className="text-sm text-slate-700">Email: {winner.winner_email}</p>
-                    {winner.winner_display_name ? (
-                      <p className="text-sm text-slate-700">Name: {winner.winner_display_name}</p>
-                    ) : null}
                     {winner.winner_phone ? (
                       <p className="text-sm text-slate-700">Phone: {winner.winner_phone}</p>
                     ) : null}

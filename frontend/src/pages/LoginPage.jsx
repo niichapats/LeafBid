@@ -67,7 +67,7 @@ function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-xl bg-emerald-600 px-4 py-3 font-semibold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-70"
+            className="w-full border border-emerald-100 bg-linear-to-r from-emerald-200 to-lime-200/90 text-emerald-900/90 rounded-full px-3 py-1.5 text-sm font-medium hover:from-emerald-300/80 hover:to-lime-300/80 disabled:opacity-60"
           >
             {loading ? 'Signing in...' : 'Login'}
           </button>

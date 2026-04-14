@@ -2,8 +2,8 @@ function PageHeader({
   title,
   subtitle,
   containerClassName = 'mb-6',
-  titleClassName = 'text-3xl font-bold text-slate-900',
-  subtitleClassName = 'mt-1 text-sm text-slate-600',
+  titleClassName = 'text-3xl font-bold text-emerald-800',
+  subtitleClassName = 'mt-1 text-sm text-emerald-700/80',
 }) {
   return (
     <div className={containerClassName}>

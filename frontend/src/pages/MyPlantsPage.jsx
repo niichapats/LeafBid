@@ -146,7 +146,7 @@ function MyPlantsPage() {
             />
             <button
               onClick={() => setShowForm((value) => !value)}
-              className="rounded-full border border-green-400 px-3 py-1.5 text-sm font-medium text-green-300 transition-colors hover:bg-green-400/20"
+              className="border border-green-600 text-green-700 hover:bg-green-50 rounded-full px-3 py-1.5 text-sm font-medium"
             >
               Create New Plant
             </button>
@@ -188,7 +188,7 @@ function MyPlantsPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="mt-4 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-100"
+              className="mt-4 border border-green-600 text-green-700 hover:bg-green-50 rounded-full px-3 py-1.5 text-sm font-medium disabled:opacity-60"
             >
               {submitting ? 'Saving...' : 'Save Plant'}
             </button>
@@ -238,14 +238,14 @@ function MyPlantsPage() {
                       <button
                         type="submit"
                         disabled={submitting}
-                        className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-100"
+                        className="border border-green-600 text-green-700 hover:bg-green-50 rounded-full px-3 py-1.5 text-sm font-medium disabled:opacity-60"
                       >
                         {submitting ? 'Saving...' : 'Save'}
                       </button>
                       <button
                         type="button"
                         onClick={handleCancelEdit}
-                        className="rounded-full border border-stone-200 px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-stone-100"
+                        className="border border-gray-300 text-gray-600 hover:bg-gray-50 rounded-full px-3 py-1.5 text-sm font-medium"
                       >
                         Cancel
                       </button>
