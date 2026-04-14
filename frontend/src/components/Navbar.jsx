@@ -36,7 +36,7 @@ function Navbar() {
     return []
   }
 
-  const displayName = user?.displayName || user?.email || 'User'
+  const displayName = user?.display_name || user?.email || 'User'
   const navLinks = getNavLinks()
 
   return (
