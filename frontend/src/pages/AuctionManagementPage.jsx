@@ -6,7 +6,7 @@ import PageHeader from '../components/PageHeader.jsx'
 import api from '../utils/api.js'
 import { getUser } from '../utils/auth.js'
 
-function CreateAuctionPage() {
+function AuctionManagementPage() {
   const navigate = useNavigate()
   const user = getUser()
   const [plants, setPlants] = useState([])
@@ -475,4 +475,4 @@ function CreateAuctionPage() {
   )
 }
 
-export default CreateAuctionPage
+export default AuctionManagementPage

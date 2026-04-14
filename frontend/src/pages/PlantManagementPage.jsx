@@ -7,7 +7,7 @@ import PageHeader from '../components/PageHeader.jsx'
 import api from '../utils/api.js'
 import { getUser } from '../utils/auth.js'
 
-function MyPlantsPage() {
+function PlantManagementPage() {
   const user = getUser()
   const [plants, setPlants] = useState([])
   const [loading, setLoading] = useState(true)
@@ -262,4 +262,4 @@ function MyPlantsPage() {
   )
 }
 
-export default MyPlantsPage
+export default PlantManagementPage
