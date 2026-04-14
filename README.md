@@ -114,7 +114,24 @@ npm run dev
 ```
 
 ---
-
 ## Screenshots
 
-UI is currently in development. Screenshots will be added in a future update.
+### Authentication
+| Login | Register (with validation) |
+|-------|---------------------------|
+| <img src="docs/screenshots/login.png" width="400"> | <img src="docs/screenshots/register_with_validation.png" width="400"> |
+
+### Buyer
+| Browse Auctions | Bidding Room | Bidding Room (continue) | Profile & Won Auctions |
+|-----------------|--------------|--------------------------|------------------------|
+| <img src="docs/screenshots/buyer_browse_auctions.png" width="200"> | <img src="docs/screenshots/buyer_bidding_room1.png" width="200"> | <img src="docs/screenshots/buyer_bidding_room2.png" width="200"> | <img src="docs/screenshots/buyer_profile.png" width="200"> |
+
+### Seller
+| Plant Management | Auction Management | Bidding Room (seller view) | Auction Ended |
+|------------------|--------------------|---------------------------|---------------|
+| <img src="docs/screenshots/seller_manage_plants.png" width="200"> | <img src="docs/screenshots/seller_manage_auctions.png" width="200"> | <img src="docs/screenshots/seller_bidding_room1.png" width="200"> | <img src="docs/screenshots/seller_bidding_room2.png" width="200"> |
+
+### Admin
+| Plant Verification | Manage Auctions |
+|---------------------------|-----------------|
+| <img src="docs/screenshots/admin_manage_plants.png" width="400"> | <img src="docs/screenshots/admin_manage_auctions.png" width="400"> |
