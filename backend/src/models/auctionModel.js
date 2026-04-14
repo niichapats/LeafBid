@@ -59,8 +59,8 @@ export async function placeBid(auctionId, buyerId, amount) {
       throw new Error('Auction is not active')
     }
 
-    if (Number(amount) <= Number(auction.current_price)) {
-      throw new Error('Bid must be higher than current price')
+    if (Number(amount) < Number(auction.current_price) + 100) {
+      throw new Error('Bid must be at least ฿100 higher than current price')
     }
 
     const updateRes = await client.query('UPDATE auctions SET current_price = $2 WHERE id = $1 RETURNING *', [auctionId, amount])

@@ -131,6 +131,11 @@ function BiddingRoomPage() {
       return
     }
 
+    if (auction && bidValue < Number(auction.current_price) + 100) {
+      setError('Bid must be at least ฿100 higher than current price')
+      return
+    }
+
     socketRef.current?.emit('place_bid', {
       auctionId,
       amount: bidValue,
@@ -205,6 +210,7 @@ function BiddingRoomPage() {
                 Place Bid
               </button>
             </div>
+            {auction ? <p className="text-sm text-slate-400 mt-1">Minimum bid: ฿{Number(auction.current_price) + 100}</p> : null}
           </form>
         ) : null}
 
