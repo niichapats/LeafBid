@@ -1,21 +1,20 @@
+
 # LeafBid
 
 ## Project Description
-LeafBid is a web-based real-time auction platform for rare and collectible plants. It replaces unreliable social media auctions with a secure, structured marketplace that prevents bidding disputes, eliminates time sync errors, and ensures plant authenticity through an expert verification process.
+LeafBid is a web-based real-time auction platform for rare and collectible plants. It provides a secure, structured marketplace that replaces unreliable social media auctions. LeafBid prevents bidding disputes, eliminates time sync errors, and ensures plant authenticity through an expert verification process. The platform supports live bidding, seller management, and admin verification, creating a trusted environment for plant enthusiasts and sellers.
 
 ---
 
-## System Architecture
+## System Architecture Overview
 
-- **Architecture Style:** Real-time Client-Server
+- **Architecture Style:** Layered Architecture (4 layers)
+- **Layers:** Presentation → Application → Domain → Data
 - **Communication:** REST APIs + WebSockets (Socket.io)
 - **Database:** PostgreSQL
 
-### High-Level Flow
-1. React frontend displays active plant auctions.
-2. Node.js + Express backend handles API requests.
-3. Socket.io broadcasts live bid updates to all connected clients.
-4. PostgreSQL stores users, plants, auctions, and bid history.
+### Why Layered Architecture?
+Layered Architecture was chosen over Microservices to simplify deployment, reduce operational overhead, and enable rapid iteration for a small team. This approach provides clear separation of concerns, maintainability, and scalability for the current project size, while allowing future migration to microservices if needed.
 
 ### Project Structure
 ```
@@ -26,13 +25,17 @@ LeafBid/
 │  │  ├─ models/
 │  │  ├─ routes/
 │  │  ├─ services/
+│  │  ├─ middleware/
+│  │  ├─ database/
+│  │  ├─ socket/
+│  │  ├─ scheduler/
 │  │  └─ server.js
 │  └─ .env.example
 └─ frontend/
    └─ src/
       ├─ components/
-      ├─ hooks/
       ├─ pages/
+      ├─ utils/
       └─ App.jsx
 ```
 
@@ -40,22 +43,26 @@ LeafBid/
 
 ## User Roles & Permissions
 
-| Role | Description | Permissions |
-|------|-------------|-------------|
-| **Buyer** | Rare plant collector | Browse listings, place real-time bids, view bid history, manage personal info |
-| **Seller** | Garden owner / plant seller | Create and manage plant listings, upload images, set auction timers, view sales |
-| **Admin** | Plant expert / moderator | Access admin dashboard, approve or reject pending listings, oversee platform activity |
+| Role    | Description                  | Permissions                                                                 |
+|---------|------------------------------|-----------------------------------------------------------------------------|
+| **Buyer**  | Rare plant collector         | CREATE bid, READ auctions/profile, UPDATE profile                           |
+| **Seller** | Garden owner / plant seller | CREATE/READ/UPDATE/DELETE plants and auctions                               |
+| **Admin**  | Plant expert / moderator    | READ/UPDATE plants (verify), READ/DELETE auctions                           |
 
 ---
 
 ## Technology Stack
 
-| Layer | Technology |
-|-------|------------|
-| Frontend | React (Vite), Tailwind CSS |
-| Backend | Node.js, Express |
-| Real-Time Engine | Socket.io |
-| Database | PostgreSQL |
+| Layer             | Technology                                 |
+|-------------------|--------------------------------------------|
+| Frontend          | React (Vite), Tailwind CSS                 |
+| Backend           | Node.js, Express                           |
+| Real-Time Engine  | Socket.io                                  |
+| Database          | PostgreSQL                                 |
+| Authentication    | JWT (jsonwebtoken + bcrypt)                |
+| File Upload       | Multer                                     |
+| Scheduler         | node-cron                                  |
+| HTTP Client       | Axios                                      |
 
 ---
 
@@ -63,7 +70,7 @@ LeafBid/
 
 ### Prerequisites
 - Node.js v18+
-- PostgreSQL
+- PostgreSQL (database named `leafbid`)
 
 ### 1. Clone the repository
 ```bash
@@ -77,6 +84,9 @@ cd backend
 npm install
 cp .env.example .env
 # Edit .env and fill in your DATABASE_URL and PORT
+# Requires PostgreSQL database named 'leafbid'
+# Run schema.sql to initialize tables:
+psql -U your_user -d leafbid -f src/database/schema.sql
 ```
 
 ### 3. Set up the frontend
@@ -92,8 +102,8 @@ npm install
 ### Start the backend
 ```bash
 cd backend
-npm run dev
-# Server runs on http://localhost:5000
+node src/server.js
+# Server runs on http://localhost:3000
 ```
 
 ### Start the frontend
@@ -107,4 +117,4 @@ npm run dev
 
 ## Screenshots
 
-> UI is currently in development. Screenshots will be added in a future update.
+UI is currently in development. Screenshots will be added in a future update.
