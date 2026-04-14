@@ -1,9 +1,40 @@
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { getUser, removeToken } from '../utils/auth.js'
+import api from '../utils/api.js'
 
 function Navbar() {
   const navigate = useNavigate()
   const user = getUser()
+  const [profileDisplayName, setProfileDisplayName] = useState('')
+
+  useEffect(() => {
+    if (!user) {
+      setProfileDisplayName('')
+      return
+    }
+
+    let isMounted = true
+
+    const loadProfile = async () => {
+      try {
+        const response = await api.get('/profile')
+        if (isMounted) {
+          setProfileDisplayName(response.data?.display_name || '')
+        }
+      } catch {
+        if (isMounted) {
+          setProfileDisplayName('')
+        }
+      }
+    }
+
+    loadProfile()
+
+    return () => {
+      isMounted = false
+    }
+  }, [user])
 
   const handleLogout = () => {
     removeToken()
@@ -14,7 +45,7 @@ function Navbar() {
     if (!user) return []
 
     if (user.role === 'buyer') {
-      return []
+      return [{ label: 'Browse Auctions', href: '/' }]
     }
 
     if (user.role === 'seller') {
@@ -36,7 +67,7 @@ function Navbar() {
     return []
   }
 
-  const displayName = user?.display_name || user?.email || 'User'
+  const displayName = profileDisplayName || user?.email || 'User'
   const navLinks = getNavLinks()
 
   return (
