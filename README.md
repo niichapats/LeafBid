@@ -122,16 +122,24 @@ npm run dev
 | <img src="docs/screenshots/login.png" width="400"> | <img src="docs/screenshots/register_with_validation.png" width="400"> |
 
 ### Buyer
-| Browse Auctions | Bidding Room | Bidding Room (continue) | Profile & Won Auctions |
-|-----------------|--------------|--------------------------|------------------------|
-| <img src="docs/screenshots/buyer_browse_auctions.png" width="200"> | <img src="docs/screenshots/buyer_bidding_room1.png" width="200"> | <img src="docs/screenshots/buyer_bidding_room2.png" width="200"> | <img src="docs/screenshots/buyer_profile.png" width="200"> |
+| Browse Auctions | Bidding Room |
+|-----------------|--------------|
+| <img src="docs/screenshots/buyer_browse_auctions.png" width="400"> | <img src="docs/screenshots/buyer_bidding_room1.png" width="400"> |
+
+| Bidding Room (continue) | Profile & Won Auctions |
+|-------------------------|------------------------|
+| <img src="docs/screenshots/buyer_bidding_room2.png" width="400"> | <img src="docs/screenshots/buyer_profile.png" width="400"> |
 
 ### Seller
-| Plant Management | Auction Management | Bidding Room (seller view) | Auction Ended |
-|------------------|--------------------|---------------------------|---------------|
-| <img src="docs/screenshots/seller_manage_plants.png" width="200"> | <img src="docs/screenshots/seller_manage_auctions.png" width="200"> | <img src="docs/screenshots/seller_bidding_room1.png" width="200"> | <img src="docs/screenshots/seller_bidding_room2.png" width="200"> |
+| Plant Management | Auction Management |
+|------------------|--------------------|
+| <img src="docs/screenshots/seller_manage_plants.png" width="400"> | <img src="docs/screenshots/seller_manage_auctions.png" width="400"> |
+
+| Bidding Room (seller view) | Auction Ended |
+|---------------------------|---------------|
+| <img src="docs/screenshots/seller_bidding_room1.png" width="400"> | <img src="docs/screenshots/seller_bidding_room2.png" width="400"> |
 
 ### Admin
-| Plant Verification | Manage Auctions |
+| Pending Plant Verification | Manage Auctions |
 |---------------------------|-----------------|
 | <img src="docs/screenshots/admin_manage_plants.png" width="400"> | <img src="docs/screenshots/admin_manage_auctions.png" width="400"> |
