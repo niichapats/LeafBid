@@ -44,49 +44,49 @@ function AdminPlantsPage() {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-mist-950 px-4 py-8">
+      <div className="min-h-screen bg-stone-50 px-4 py-8">
         <div className="mx-auto max-w-5xl">
           <div className="mb-6">
-            <h1 className="text-3xl font-bold text-emerald-100">Pending Plant Verification</h1>
-            <p className="mt-1 text-sm text-gray-300">Review and approve or reject seller plant listings</p>
+            <h1 className="text-3xl font-bold text-slate-900">Pending Plant Verification</h1>
+            <p className="mt-1 text-sm text-slate-600">Review and approve or reject seller plant listings</p>
           </div>
 
-        {error ? <p className="mb-4 bg-red-400/20 text-red-300 border border-red-400/50 rounded-full px-3 py-1 text-sm">{error}</p> : null}
+        {error ? <p className="mb-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</p> : null}
 
         <div className="space-y-3">
-          {loading ? <p className="text-gray-300">Loading pending plants...</p> : null}
-          {!loading && plants.length === 0 ? <p className="text-gray-300">No pending plants</p> : null}
+          {loading ? <p className="text-slate-500">Loading pending plants...</p> : null}
+          {!loading && plants.length === 0 ? <p className="text-slate-500">No pending plants</p> : null}
 
           {plants.map((plant) => (
-            <div key={plant.id} className="rounded-2xl border border-emerald-200/70 bg-linear-to-br from-emerald-200/35 to-lime-200/30 p-5 text-white shadow-sm transition-shadow hover:shadow-lg ring-1 ring-emerald-100">
-              <h2 className="text-xl font-semibold text-white">{plant.title}</h2>
+            <div key={plant.id} className="rounded-2xl border border-stone-200 bg-white p-5 text-slate-900 shadow-sm transition-shadow hover:shadow-md">
+              <h2 className="text-xl font-semibold text-slate-900">{plant.title}</h2>
               <div className="mt-2">
                 {plant.image_url ? (
                   <img
                     src={`http://localhost:3000${plant.image_url}`}
                     alt={plant.title}
-                    className="h-32 w-48 rounded-lg border border-gray-200 object-cover"
+                    className="h-32 w-48 rounded-lg border border-stone-200 object-cover"
                   />
                 ) : (
-                  <p className="text-sm text-white/80">No image</p>
+                  <p className="text-sm text-slate-500">No image</p>
                 )}
               </div>
-              <p className="mt-2 text-sm text-white/90">{plant.description || 'No description'}</p>
-              <p className="mt-2 text-sm text-white/90">Seller: {plant.seller_email}</p>
-              <p className="mt-1 text-xs text-white/80">
+              <p className="mt-2 text-sm text-slate-600">{plant.description || 'No description'}</p>
+              <p className="mt-2 text-sm text-slate-600">Seller: {plant.seller_email}</p>
+              <p className="mt-1 text-xs text-slate-500">
                 Created: {plant.created_at ? new Date(plant.created_at).toLocaleString() : '-'}
               </p>
 
               <div className="mt-4 flex gap-2">
                 <button
                   onClick={() => handleVerify(plant.id, 'approved')}
-                  className="rounded-full border border-green-400 px-4 py-2 text-sm font-medium text-green-300 transition-colors hover:bg-green-400/20"
+                  className="rounded-full border border-emerald-200 px-4 py-2 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-50"
                 >
                   Approve
                 </button>
                 <button
                   onClick={() => handleVerify(plant.id, 'rejected')}
-                  className="rounded-full border border-red-400 px-4 py-2 text-sm font-medium text-red-300 transition-colors hover:bg-red-400/20"
+                  className="rounded-full border border-rose-200 px-4 py-2 text-sm font-medium text-rose-600 transition-colors hover:bg-rose-50"
                 >
                   Reject
                 </button>

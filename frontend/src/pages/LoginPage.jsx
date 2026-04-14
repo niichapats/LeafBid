@@ -27,39 +27,39 @@ function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-mist-950 flex items-center justify-center px-4">
-      <div className="w-full max-w-md rounded-3xl border border-emerald-200/70 bg-linear-to-br from-emerald-200/35 to-lime-200/30 p-8 text-white shadow-sm transition-shadow hover:shadow-lg ring-1 ring-emerald-100">
+    <div className="min-h-screen bg-stone-50 flex items-center justify-center px-4">
+      <div className="w-full max-w-md rounded-3xl border border-stone-200 bg-white p-8 text-slate-900 shadow-sm transition-shadow hover:shadow-md">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-white">LeafBid</h1>
-          <p className="mt-2 text-sm text-white/90">Sign in to continue bidding on rare plants</p>
+          <h1 className="text-3xl font-bold text-slate-900">LeafBid</h1>
+          <p className="mt-2 text-sm text-slate-600">Sign in to continue bidding on rare plants</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="mb-1 block text-sm font-medium text-white">Email</label>
+            <label className="mb-1 block text-sm font-medium text-slate-700">Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+              className="w-full rounded-xl border border-stone-300 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
               placeholder="you@example.com"
               required
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-white">Password</label>
+            <label className="mb-1 block text-sm font-medium text-slate-700">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+              className="w-full rounded-xl border border-stone-300 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
               placeholder="••••••••"
               required
             />
           </div>
 
-          {error ? <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">{error}</p> : null}
+          {error ? <p className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</p> : null}
 
           <button
             type="submit"
@@ -70,7 +70,7 @@ function LoginPage() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-white/90">
+        <p className="mt-6 text-center text-sm text-slate-600">
           Don’t have an account?{' '}
           <Link to="/register" className="font-medium text-emerald-700 hover:text-emerald-800">
             Register

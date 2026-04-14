@@ -201,41 +201,41 @@ function CreateAuctionPage() {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-mist-950 px-4 py-8">
+      <div className="min-h-screen bg-stone-50 px-4 py-8">
         <div className="mx-auto max-w-5xl">
           <div className="mb-6 flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-emerald-100">Auction Management</h1>
-              <p className="mt-1 text-sm text-gray-300">Create and manage auctions for your approved plants</p>
+              <h1 className="text-3xl font-bold text-slate-900">Auction Management</h1>
+              <p className="mt-1 text-sm text-slate-600">Create and manage auctions for your approved plants</p>
             </div>
             <button
               onClick={() => setShowCreateForm((value) => !value)}
-              className="border border-green-400 text-green-300 hover:bg-green-400/20 px-3 py-1.5 text-sm rounded-full font-medium transition-colors"
+              className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-100"
             >
               Create New Auction
             </button>
           </div>
 
-        {error ? <p className="mb-4 bg-red-400/20 text-red-300 border border-red-400/50 rounded-full px-3 py-1 text-sm">{error}</p> : null}
-        {success ? <p className="mb-4 bg-green-400/20 text-green-300 border border-green-400/50 rounded-full px-3 py-1 text-sm">{success}</p> : null}
+        {error ? <p className="mb-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</p> : null}
+        {success ? <p className="mb-4 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{success}</p> : null}
 
         {showCreateForm ? (
-          <div className="mb-6 rounded-2xl border border-emerald-200/70 bg-linear-to-br from-emerald-200/35 to-lime-200/30 p-6 text-white shadow-sm transition-shadow hover:shadow-lg ring-1 ring-emerald-100">
-            <h2 className="mb-4 text-xl font-semibold text-white">Create New Auction</h2>
-            {loading ? <p className="text-white/90">Loading...</p> : null}
+          <div className="mb-6 rounded-2xl border border-stone-200 bg-white p-6 text-slate-900 shadow-sm transition-shadow hover:shadow-md">
+            <h2 className="mb-4 text-xl font-semibold text-slate-900">Create New Auction</h2>
+            {loading ? <p className="text-slate-500">Loading...</p> : null}
 
             {!loading && approvedPlants.length === 0 ? (
-              <p className="text-white/90">No approved plants available. Wait for admin approval before creating auctions.</p>
+              <p className="text-slate-600">No approved plants available. Wait for admin approval before creating auctions.</p>
             ) : null}
 
             {!loading && approvedPlants.length > 0 ? (
               <form onSubmit={handleCreateAuction} className="grid gap-4 md:grid-cols-2">
                 <div className="md:col-span-2">
-                  <label className="mb-1 block text-sm font-medium text-white">Approved Plant</label>
+                  <label className="mb-1 block text-sm font-medium text-slate-700">Approved Plant</label>
                   <select
                     value={selectedPlantId}
                     onChange={(e) => setSelectedPlantId(e.target.value)}
-                    className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-4 py-2 text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
                     required
                   >
                     {approvedPlants.map((plant) => (
@@ -247,36 +247,36 @@ function CreateAuctionPage() {
                 </div>
 
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-white">Start Price</label>
+                  <label className="mb-1 block text-sm font-medium text-slate-700">Start Price</label>
                   <input
                     type="number"
                     min="0"
                     step="0.01"
                     value={startPrice}
                     onChange={(e) => setStartPrice(e.target.value)}
-                    className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-4 py-2 text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-white">Start Time</label>
+                  <label className="mb-1 block text-sm font-medium text-slate-700">Start Time</label>
                   <input
                     type="datetime-local"
                     value={startTime}
                     onChange={(e) => setStartTime(e.target.value)}
-                    className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-4 py-2 text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-white">End Time</label>
+                  <label className="mb-1 block text-sm font-medium text-slate-700">End Time</label>
                   <input
                     type="datetime-local"
                     value={endTime}
                     onChange={(e) => setEndTime(e.target.value)}
-                    className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-4 py-2 text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
                     required
                   />
                 </div>
@@ -285,7 +285,7 @@ function CreateAuctionPage() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="border border-green-400 text-green-300 hover:bg-green-400/20 px-3 py-1.5 text-sm rounded-full font-medium transition-colors"
+                    className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700 disabled:opacity-60"
                   >
                     {submitting ? 'Creating...' : 'Create Auction'}
                   </button>
@@ -295,16 +295,16 @@ function CreateAuctionPage() {
           </div>
         ) : null}
 
-        <div className="rounded-2xl p-6 shadow ring-1 ring-emerald-100">
-          <h2 className="mb-4 text-xl font-semibold text-emerald-200">My Auctions</h2>
+        <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
+          <h2 className="mb-4 text-xl font-semibold text-slate-900">My Auctions</h2>
 
-          {auctions.length === 0 ? <p className="text-gray-600">No auctions to show.</p> : null}
+          {auctions.length === 0 ? <p className="text-slate-500">No auctions to show.</p> : null}
 
           <div className="space-y-3">
             {auctions.map((auction) => (
               <div
                 key={auction.id}
-                className="cursor-pointer rounded-xl border border-emerald-200/70 bg-linear-to-br from-emerald-200/35 to-lime-200/30 p-4 text-white shadow-sm transition-shadow hover:shadow-lg"
+                className="cursor-pointer rounded-2xl border border-stone-200 bg-white p-4 text-slate-900 shadow-sm transition-shadow hover:shadow-md"
                 onClick={() => navigate(`/auctions/${auction.id}`)}
               >
                 <div className="flex items-start gap-4">
@@ -312,53 +312,53 @@ function CreateAuctionPage() {
                     <img
                       src={`http://localhost:3000${auction.image_url}`}
                       alt={auction.plant_title}
-                      className="w-32 h-32 object-cover rounded-lg shrink-0"
+                        className="w-32 h-32 object-cover rounded-lg shrink-0"
                     />
                   ) : (
-                    <div className="w-32 h-32 bg-gray-100 rounded-lg shrink-0 flex items-center justify-center text-gray-400 text-sm">
+                    <div className="w-32 h-32 bg-stone-100 rounded-lg shrink-0 flex items-center justify-center text-slate-400 text-sm">
                       No image
                     </div>
                   )}
 
                   <div className="flex-1 flex items-start justify-between gap-3">
                     <div>
-                      <p className="font-semibold text-white">{auction.plant_title || `Plant #${auction.plant_id}`}</p>
+                      <p className="font-semibold text-slate-900">{auction.plant_title || `Plant #${auction.plant_id}`}</p>
 
                       <div className="mt-2">
                         {auction.status === 'scheduled' ? (
-                          <span className="bg-yellow-400/20 text-yellow-300 border border-yellow-400/50 rounded-full px-3 py-1 text-sm">Scheduled</span>
+                          <span className="bg-amber-50 text-amber-700 border border-amber-200 rounded-full px-3 py-1 text-sm">Scheduled</span>
                         ) : null}
                         {auction.status === 'active' ? (
-                          <span className="bg-green-400/20 text-green-300 border border-green-400/50 rounded-full px-3 py-1 text-sm">Active</span>
+                          <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full px-3 py-1 text-sm">Active</span>
                         ) : null}
                         {auction.status === 'ended' ? (
-                          <span className="bg-gray-400/20 text-gray-300 border border-gray-400/50 rounded-full px-3 py-1 text-sm">Ended</span>
+                          <span className="bg-slate-50 text-slate-600 border border-slate-200 rounded-full px-3 py-1 text-sm">Ended</span>
                         ) : null}
                       </div>
 
-                      <p className="mt-2 text-sm text-white/90">Start price: ฿{auction.start_price}</p>
-                      <p className="text-sm text-white/90">Current price: ฿{auction.current_price}</p>
-                      <p className="text-sm text-white/90">
+                      <p className="mt-2 text-sm text-slate-600">Start price: ฿{auction.start_price}</p>
+                      <p className="text-sm text-slate-600">Current price: ฿{auction.current_price}</p>
+                      <p className="text-sm text-slate-600">
                         Start time: {auction.start_time ? new Date(auction.start_time).toLocaleString() : '-'}
                       </p>
-                      <p className="text-sm text-white/90">
+                      <p className="text-sm text-slate-600">
                         End time: {auction.end_time ? new Date(auction.end_time).toLocaleString() : '-'}
                       </p>
 
                       {auction.status === 'ended' ? (
-                        <div className="mt-2 bg-gray-400/20 text-gray-300 border border-gray-400/50 rounded-full px-3 py-1 text-sm">
+                        <div className="mt-2 rounded-xl border border-stone-200 bg-stone-50 px-3 py-2 text-sm text-slate-700">
                           {auctionWinners[auction.id] ? (
                             <>
-                              <p className="text-sm font-semibold text-gray-300">Winner: {auctionWinners[auction.id].winner_email}</p>
+                              <p className="text-sm font-semibold text-slate-900">Winner: {auctionWinners[auction.id].winner_email}</p>
                               {auctionWinners[auction.id].winner_display_name ? (
-                                <p className="text-sm text-gray-300">Name: {auctionWinners[auction.id].winner_display_name}</p>
+                                <p className="text-sm text-slate-700">Name: {auctionWinners[auction.id].winner_display_name}</p>
                               ) : null}
                               {auctionWinners[auction.id].winner_phone ? (
-                                <p className="text-sm text-gray-300">Phone: {auctionWinners[auction.id].winner_phone}</p>
+                                <p className="text-sm text-slate-700">Phone: {auctionWinners[auction.id].winner_phone}</p>
                               ) : null}
                             </>
                           ) : (
-                            <p className="text-sm font-semibold text-gray-300">No bids — no winner</p>
+                            <p className="text-sm font-semibold text-slate-700">No bids — no winner</p>
                           )}
                         </div>
                       ) : null}
@@ -372,19 +372,19 @@ function CreateAuctionPage() {
                               event.stopPropagation()
                               handleStartAuction(auction.id)
                             }}
-                            className="rounded-full border border-green-400 px-3 py-1.5 text-sm font-medium text-green-300 transition-colors hover:bg-green-400/20"
+                            className="rounded-full border border-emerald-200 px-3 py-1.5 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-50"
                           >
                             Start Auction
                           </button>
                           <button
                             onClick={(event) => handleEditClick(event, auction)}
-                            className="rounded-full border border-gray-400 px-3 py-1.5 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-400/20"
+                            className="rounded-full border border-stone-200 px-3 py-1.5 text-sm font-medium text-slate-600 transition-colors hover:bg-stone-100"
                           >
                             Edit
                           </button>
                           <button
                             onClick={(event) => handleDeleteAuction(event, auction.id)}
-                            className="rounded-full border border-red-400 px-3 py-1.5 text-sm font-medium text-red-300 transition-colors hover:bg-red-400/20"
+                            className="rounded-full border border-rose-200 px-3 py-1.5 text-sm font-medium text-rose-600 transition-colors hover:bg-rose-50"
                           >
                             Delete
                           </button>
@@ -398,13 +398,13 @@ function CreateAuctionPage() {
                               event.stopPropagation()
                               handleEndAuction(auction.id)
                             }}
-                            className="rounded-full border border-yellow-400 px-3 py-1.5 text-sm font-medium text-yellow-300 transition-colors hover:bg-yellow-400/20"
+                            className="rounded-full border border-amber-200 px-3 py-1.5 text-sm font-medium text-amber-700 transition-colors hover:bg-amber-50"
                           >
                             End Auction
                           </button>
                           <button
                             onClick={(event) => handleDeleteAuction(event, auction.id)}
-                            className="rounded-full border border-red-400 px-3 py-1.5 text-sm font-medium text-red-300 transition-colors hover:bg-red-400/20"
+                            className="rounded-full border border-rose-200 px-3 py-1.5 text-sm font-medium text-rose-600 transition-colors hover:bg-rose-50"
                           >
                             Delete
                           </button>
@@ -414,7 +414,7 @@ function CreateAuctionPage() {
                       {auction.status === 'ended' ? (
                         <button
                           onClick={(event) => handleDeleteAuction(event, auction.id)}
-                          className="rounded-full border border-red-400 px-3 py-1.5 text-sm font-medium text-red-300 transition-colors hover:bg-red-400/20"
+                          className="rounded-full border border-rose-200 px-3 py-1.5 text-sm font-medium text-rose-600 transition-colors hover:bg-rose-50"
                         >
                           Delete
                         </button>
@@ -427,37 +427,37 @@ function CreateAuctionPage() {
                   <form
                     onSubmit={(event) => handleUpdateAuction(event, auction.id)}
                     onClick={(event) => event.stopPropagation()}
-                    className="mt-4 grid gap-3 rounded-xl border border-yellow-200/80 bg-yellow-100/70 p-4 text-white shadow-sm transition-shadow hover:shadow-lg md:grid-cols-3"
+                    className="mt-4 grid gap-3 rounded-2xl border border-stone-200 bg-stone-50 p-4 text-slate-900 shadow-sm transition-shadow hover:shadow-md md:grid-cols-3"
                   >
                     <div>
-                      <label className="mb-1 block text-sm font-medium text-white">Start Price</label>
+                      <label className="mb-1 block text-sm font-medium text-slate-700">Start Price</label>
                       <input
                         type="number"
                         min="0"
                         step="0.01"
                         value={editStartPrice}
                         onChange={(e) => setEditStartPrice(e.target.value)}
-                        className="w-full rounded border border-gray-200 px-3 py-2 outline-none focus:border-yellow-600"
+                        className="w-full rounded border border-stone-300 bg-white px-3 py-2 text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
                         required
                       />
                     </div>
                     <div>
-                      <label className="mb-1 block text-sm font-medium text-white">Start Time</label>
+                      <label className="mb-1 block text-sm font-medium text-slate-700">Start Time</label>
                       <input
                         type="datetime-local"
                         value={editStartTime}
                         onChange={(e) => setEditStartTime(e.target.value)}
-                        className="w-full rounded border border-gray-200 px-3 py-2 outline-none focus:border-yellow-600"
+                        className="w-full rounded border border-stone-300 bg-white px-3 py-2 text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
                         required
                       />
                     </div>
                     <div>
-                      <label className="mb-1 block text-sm font-medium text-white">End Time</label>
+                      <label className="mb-1 block text-sm font-medium text-slate-700">End Time</label>
                       <input
                         type="datetime-local"
                         value={editEndTime}
                         onChange={(e) => setEditEndTime(e.target.value)}
-                        className="w-full rounded border border-gray-200 px-3 py-2 outline-none focus:border-yellow-600"
+                        className="w-full rounded border border-stone-300 bg-white px-3 py-2 text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
                         required
                       />
                     </div>
@@ -465,14 +465,14 @@ function CreateAuctionPage() {
                     <div className="md:col-span-3 flex gap-2">
                       <button
                         type="submit"
-                        className="border border-green-400 text-green-300 hover:bg-green-400/20 px-3 py-1.5 text-sm rounded-full font-medium transition-colors"
+                        className="rounded-full bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
                       >
                         Save
                       </button>
                       <button
                         type="button"
                         onClick={handleCancelEdit}
-                        className="rounded-full border border-gray-400 px-3 py-1.5 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-400/20"
+                        className="rounded-full border border-stone-200 px-3 py-1.5 text-sm font-medium text-slate-600 transition-colors hover:bg-stone-100"
                       >
                         Cancel
                       </button>

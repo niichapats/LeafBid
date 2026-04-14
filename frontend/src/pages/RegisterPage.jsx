@@ -87,79 +87,79 @@ function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-mist-950 flex items-center justify-center px-4">
-      <div className="w-full max-w-md rounded-3xl border border-emerald-200/70 bg-linear-to-br from-emerald-200/35 to-lime-200/30 p-8 text-white shadow-sm transition-shadow hover:shadow-lg ring-1 ring-emerald-100">
+    <div className="min-h-screen bg-stone-50 flex items-center justify-center px-4">
+      <div className="w-full max-w-md rounded-3xl border border-stone-200 bg-white p-8 text-slate-900 shadow-sm transition-shadow hover:shadow-md">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-white">Create account</h1>
-          <p className="mt-2 text-sm text-white/90">Join LeafBid as a buyer or seller</p>
+          <h1 className="text-3xl font-bold text-slate-900">Create account</h1>
+          <p className="mt-2 text-sm text-slate-600">Join LeafBid as a buyer or seller</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="mb-1 block text-sm font-medium text-white">Full Name</label>
+            <label className="mb-1 block text-sm font-medium text-slate-700">Full Name</label>
             <input
               type="text"
               value={displayName}
               onChange={(e) => handleDisplayNameChange(e.target.value)}
-              className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+              className="w-full rounded-xl border border-stone-300 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
               placeholder="First and Last Name"
               required
             />
-            {nameError ? <p className="mt-1 text-sm text-red-600">{nameError}</p> : null}
+            {nameError ? <p className="mt-1 text-sm text-rose-600">{nameError}</p> : null}
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-white">Phone Number</label>
+            <label className="mb-1 block text-sm font-medium text-slate-700">Phone Number</label>
             <input
               type="text"
               value={phone}
               onChange={(e) => handlePhoneChange(e.target.value)}
-              className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+              className="w-full rounded-xl border border-stone-300 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
               placeholder="0XXXXXXXXX"
               required
             />
-            {phoneError ? <p className="mt-1 text-sm text-red-600">{phoneError}</p> : null}
+            {phoneError ? <p className="mt-1 text-sm text-rose-600">{phoneError}</p> : null}
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-white">Email</label>
+            <label className="mb-1 block text-sm font-medium text-slate-700">Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => handleEmailChange(e.target.value)}
-              className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+              className="w-full rounded-xl border border-stone-300 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
               placeholder="example@email.com"
               required
             />
-            {emailError ? <p className="mt-1 text-sm text-red-600">{emailError}</p> : null}
+            {emailError ? <p className="mt-1 text-sm text-rose-600">{emailError}</p> : null}
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-white">Password</label>
+            <label className="mb-1 block text-sm font-medium text-slate-700">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => handlePasswordChange(e.target.value)}
-              className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+              className="w-full rounded-xl border border-stone-300 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
               placeholder="••••••••"
               required
             />
-            {passwordError ? <p className="mt-1 text-sm text-red-600">{passwordError}</p> : null}
+            {passwordError ? <p className="mt-1 text-sm text-rose-600">{passwordError}</p> : null}
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-white">Role</label>
+            <label className="mb-1 block text-sm font-medium text-slate-700">Role</label>
             <select
               value={role}
               onChange={(e) => setRole(e.target.value)}
-              className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+              className="w-full rounded-xl border border-stone-300 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
             >
               <option value="buyer">Buyer</option>
               <option value="seller">Seller</option>
             </select>
           </div>
 
-          {error ? <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">{error}</p> : null}
+          {error ? <p className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</p> : null}
 
           <button
             type="submit"
@@ -170,7 +170,7 @@ function RegisterPage() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-white/90">
+        <p className="mt-6 text-center text-sm text-slate-600">
           Already have an account?{' '}
           <Link to="/login" className="font-medium text-emerald-700 hover:text-emerald-800">
             Login

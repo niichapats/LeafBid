@@ -132,25 +132,25 @@ function MyPlantsPage() {
 
   const getStatusClass = (status) => {
     if (status === 'approved') {
-      return 'bg-green-400/20 text-green-300 border border-green-400/50 rounded-full px-3 py-1 text-sm'
+      return 'bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full px-3 py-1 text-sm'
     }
 
     if (status === 'pending') {
-      return 'bg-yellow-400/20 text-yellow-300 border border-yellow-400/50 rounded-full px-3 py-1 text-sm'
+      return 'bg-amber-50 text-amber-700 border border-amber-200 rounded-full px-3 py-1 text-sm'
     }
 
-    return 'bg-red-400/20 text-red-300 border border-red-400/50 rounded-full px-3 py-1 text-sm'
+    return 'bg-rose-50 text-rose-700 border border-rose-200 rounded-full px-3 py-1 text-sm'
   }
 
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-mist-950 px-4 py-8">
+      <div className="min-h-screen bg-stone-50 px-4 py-8">
         <div className="mx-auto max-w-5xl">
           <div className="mb-6 flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-emerald-100">Plants Management</h1>
-              <p className="mt-1 text-sm text-gray-300">Create and manage your plant listings for LeafBid</p>
+              <h1 className="text-3xl font-bold text-slate-900">Plants Management</h1>
+              <p className="mt-1 text-sm text-slate-600">Create and manage your plant listings for LeafBid</p>
             </div>
             <button
               onClick={() => setShowForm((value) => !value)}
@@ -160,93 +160,93 @@ function MyPlantsPage() {
             </button>
           </div>
 
-        {error ? <p className="mb-4 bg-red-400/20 text-red-300 border border-red-400/50 rounded-full px-3 py-1 text-sm">{error}</p> : null}
+        {error ? <p className="mb-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</p> : null}
 
         {showForm ? (
-          <form onSubmit={handleCreatePlant} className="mb-6 rounded-2xl border border-emerald-200/70 bg-linear-to-br from-emerald-200/35 to-lime-200/30 p-6 text-white shadow-sm transition-shadow hover:shadow-lg ring-1 ring-emerald-100">
+          <form onSubmit={handleCreatePlant} className="mb-6 rounded-2xl border border-stone-200 bg-white p-6 text-slate-900 shadow-sm transition-shadow hover:shadow-md">
             <div className="grid gap-4 md:grid-cols-2">
               <div className="md:col-span-2">
-                <label className="mb-1 block text-sm font-medium text-white">Title *</label>
+                <label className="mb-1 block text-sm font-medium text-slate-700">Title *</label>
                 <input
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
+                  className="w-full rounded-xl border border-stone-300 bg-white px-4 py-2 text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
                   required
                 />
               </div>
               <div className="md:col-span-2">
-                <label className="mb-1 block text-sm font-medium text-white">Description</label>
+                <label className="mb-1 block text-sm font-medium text-slate-700">Description</label>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
+                  className="w-full rounded-xl border border-stone-300 bg-white px-4 py-2 text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
                   rows={3}
                 />
               </div>
               <div className="md:col-span-2">
-                <label className="mb-1 block text-sm font-medium text-white">Image</label>
+                <label className="mb-1 block text-sm font-medium text-slate-700">Image</label>
                 <input
                   type="file"
                   accept="image/*"
                   onChange={(e) => setImageFile(e.target.files?.[0] || null)}
-                  className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
+                  className="w-full rounded-xl border border-stone-300 bg-white px-4 py-2 text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
                 />
               </div>
             </div>
             <button
               type="submit"
               disabled={submitting}
-              className="mt-4 border border-green-400 text-green-300 hover:bg-green-400/20 px-3 py-1.5 text-sm rounded-full font-medium transition-colors"
+              className="mt-4 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-100"
             >
               {submitting ? 'Saving...' : 'Save Plant'}
             </button>
           </form>
         ) : null}
 
-        <div className="rounded-2xl p-6 shadow ring-1 ring-emerald-100">
-          <h2 className="mb-4 text-xl font-semibold text-emerald-200">My Plants</h2>
+        <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
+          <h2 className="mb-4 text-xl font-semibold text-slate-900">My Plants</h2>
 
           <div className="space-y-3">
-            {loading ? <p className="text-gray-600">Loading plants...</p> : null}
-            {!loading && plants.length === 0 ? <p className="text-gray-600">No plants found.</p> : null}
+            {loading ? <p className="text-slate-500">Loading plants...</p> : null}
+            {!loading && plants.length === 0 ? <p className="text-slate-500">No plants found.</p> : null}
 
             {plants.map((plant) => (
-              <div key={plant.id} className="rounded-xl border border-emerald-200/70 bg-linear-to-br from-emerald-200/35 to-lime-200/30 p-4 text-white shadow-sm transition-shadow hover:shadow-lg">
+              <div key={plant.id} className="rounded-2xl border border-stone-200 bg-white p-4 text-slate-900 shadow-sm transition-shadow hover:shadow-md">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <h2 className="text-xl font-semibold text-white">{plant.title}</h2>
+                    <h2 className="text-xl font-semibold text-slate-900">{plant.title}</h2>
                     <div className="mt-2">
                       {plant.image_url ? (
                         <img
                           src={`http://localhost:3000${plant.image_url}`}
                           alt={plant.title}
-                          className="h-32 w-48 rounded-lg border border-gray-200 object-cover"
+                          className="h-32 w-48 rounded-lg border border-stone-200 object-cover"
                         />
                       ) : (
-                        <p className="text-sm text-white/80">No image</p>
+                        <p className="text-sm text-slate-500">No image</p>
                       )}
                     </div>
-                    <p className="mt-2 text-sm text-white/90">{plant.description || 'No description'}</p>
+                    <p className="mt-2 text-sm text-slate-600">{plant.description || 'No description'}</p>
                     <div className="mt-3 flex flex-wrap gap-2 text-xs">
                       <span className={getStatusClass(plant.status)}>Status: {plant.status}</span>
-                      <span className="bg-gray-400/20 text-gray-300 border border-gray-400/50 rounded-full px-3 py-1 text-sm">
+                      <span className="bg-slate-50 text-slate-600 border border-slate-200 rounded-full px-3 py-1 text-sm">
                         Created: {plant.created_at ? new Date(plant.created_at).toLocaleString() : '-'}
                       </span>
                     </div>
 
                     {editingPlantId === plant.id ? (
-                      <form onSubmit={(event) => handleUpdatePlant(event, plant)} className="mt-4 space-y-3 rounded-xl border border-emerald-200/70 bg-linear-to-br from-emerald-200/35 to-lime-200/30 p-4 text-white shadow-sm transition-shadow hover:shadow-lg">
+                      <form onSubmit={(event) => handleUpdatePlant(event, plant)} className="mt-4 space-y-3 rounded-2xl border border-stone-200 bg-stone-50 p-4 text-slate-900 shadow-sm transition-shadow hover:shadow-md">
                         <input
                           value={editTitle}
                           onChange={(e) => setEditTitle(e.target.value)}
-                          className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
+                          className="w-full rounded-xl border border-stone-300 bg-white px-4 py-2 text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
                           placeholder="Title"
                           required
                         />
                         <textarea
                           value={editDescription}
                           onChange={(e) => setEditDescription(e.target.value)}
-                          className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
+                          className="w-full rounded-xl border border-stone-300 bg-white px-4 py-2 text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
                           rows={3}
                           placeholder="Description"
                         />
@@ -254,20 +254,20 @@ function MyPlantsPage() {
                           type="file"
                           accept="image/*"
                           onChange={(e) => setEditImageFile(e.target.files?.[0] || null)}
-                          className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:border-emerald-500"
+                          className="w-full rounded-xl border border-stone-300 bg-white px-4 py-2 text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
                         />
                         <div className="flex gap-2">
                           <button
                             type="submit"
                             disabled={submitting}
-                            className="border border-green-400 text-green-300 hover:bg-green-400/20 px-3 py-1.5 text-sm rounded-full font-medium transition-colors"
+                              className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-100"
                           >
                             {submitting ? 'Saving...' : 'Save'}
                           </button>
                           <button
                             type="button"
                             onClick={handleCancelEdit}
-                            className="rounded-full border border-gray-400 px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-400/20"
+                              className="rounded-full border border-stone-200 px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-stone-100"
                           >
                             Cancel
                           </button>
@@ -280,14 +280,14 @@ function MyPlantsPage() {
                     {plant.status === 'pending' ? (
                       <button
                         onClick={() => openEditForm(plant)}
-                        className="rounded-full border border-gray-400 px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-400/20"
+                        className="rounded-full border border-stone-200 px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-stone-100"
                       >
                         Edit
                       </button>
                     ) : null}
                     <button
                       onClick={() => handleDelete(plant.id)}
-                      className="rounded-full border border-red-400 px-4 py-2 text-sm font-medium text-red-300 transition-colors hover:bg-red-400/20"
+                      className="rounded-full border border-rose-200 px-4 py-2 text-sm font-medium text-rose-600 transition-colors hover:bg-rose-50"
                     >
                       Delete
                     </button>

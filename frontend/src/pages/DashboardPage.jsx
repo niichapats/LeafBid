@@ -44,27 +44,27 @@ function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-mist-950">
+    <div className="min-h-screen bg-stone-50">
       <Navbar />
       
       <div className="px-4 py-8">
         <div className="mx-auto max-w-6xl">
           <div className="mb-8">
-            <h1 className="text-4xl font-bold text-emerald-100">
+            <h1 className="text-4xl font-bold text-slate-900">
               Welcome back, {profile?.display_name || user.email}!
             </h1>
-            <p className="mt-2 text-lg text-gray-300">Live Plant Auctions</p>
+            <p className="mt-2 text-lg text-slate-600">Live Plant Auctions</p>
           </div>
 
           {error ? (
-            <div className="mb-6 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">
+            <div className="mb-6 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
               {error}
             </div>
           ) : null}
 
           {loading ? (
             <div className="text-center py-12">
-              <p className="text-gray-300">Loading auctions...</p>
+              <p className="text-slate-500">Loading auctions...</p>
             </div>
           ) : null}
 
@@ -74,7 +74,7 @@ function DashboardPage() {
                 <div
                   key={auction.id}
                   onClick={() => handleCardClick(auction.id)}
-                  className="rounded-lg border border-emerald-200/70 bg-linear-to-br from-emerald-200/35 to-lime-200/30 text-white overflow-hidden shadow-sm transition-shadow hover:shadow-lg cursor-pointer"
+                  className="overflow-hidden rounded-2xl border border-stone-200 bg-white text-slate-900 shadow-sm transition-shadow hover:shadow-md cursor-pointer"
                 >
                   {auction.image_url ? (
                     <img
@@ -89,11 +89,11 @@ function DashboardPage() {
                   )}
 
                   <div className="p-4">
-                    <h3 className="text-lg font-semibold text-white line-clamp-2">{auction.plant_title || 'Untitled Plant'}</h3>
+                    <h3 className="text-lg font-semibold text-slate-900 line-clamp-2">{auction.plant_title || 'Untitled Plant'}</h3>
 
                     <div className="mt-3 space-y-2">
-                      <p className="text-xl font-bold text-white">฿{Number(auction.current_price).toLocaleString()}</p>
-                      <p className="text-sm text-white/90">
+                      <p className="text-xl font-bold text-emerald-700">฿{Number(auction.current_price).toLocaleString()}</p>
+                      <p className="text-sm text-slate-600">
                         End time: {auction.end_time ? new Date(auction.end_time).toLocaleString() : '-'}
                       </p>
                     </div>
@@ -105,7 +105,7 @@ function DashboardPage() {
 
           {!loading && auctions.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-300 text-lg">No active auctions at the moment</p>
+              <p className="text-slate-500 text-lg">No active auctions at the moment</p>
             </div>
           ) : null}
         </div>
