@@ -1,4 +1,3 @@
-
 # LeafBid
 
 ## Project Description
@@ -43,26 +42,26 @@ LeafBid/
 
 ## User Roles & Permissions
 
-| Role    | Description                  | Permissions                                                                 |
-|---------|------------------------------|-----------------------------------------------------------------------------|
-| **Buyer**  | Rare plant collector         | CREATE bid, READ auctions/profile, UPDATE profile                           |
-| **Seller** | Garden owner / plant seller | CREATE/READ/UPDATE/DELETE plants and auctions                               |
-| **Admin**  | Plant expert / moderator    | READ/UPDATE plants (verify), READ/DELETE auctions                           |
+| Role | Description | Permissions |
+|------|-------------|-------------|
+| **Buyer** | Rare plant collector | CREATE bid, READ auctions/profile, UPDATE profile |
+| **Seller** | Garden owner / plant seller | CREATE/READ/UPDATE/DELETE plants and auctions |
+| **Admin** | Plant expert / moderator | READ/UPDATE plants (verify), READ/UPDATE/DELETE auctions |
 
 ---
 
 ## Technology Stack
 
-| Layer             | Technology                                 |
-|-------------------|--------------------------------------------|
-| Frontend          | React (Vite), Tailwind CSS                 |
-| Backend           | Node.js, Express                           |
-| Real-Time Engine  | Socket.io                                  |
-| Database          | PostgreSQL                                 |
-| Authentication    | JWT (jsonwebtoken + bcrypt)                |
-| File Upload       | Multer                                     |
-| Scheduler         | node-cron                                  |
-| HTTP Client       | Axios                                      |
+| Layer | Technology |
+|-------|------------|
+| Frontend | React (Vite), Tailwind CSS |
+| Backend | Node.js, Express |
+| Real-Time Engine | Socket.io |
+| Database | PostgreSQL |
+| Authentication | JWT (jsonwebtoken + bcrypt) |
+| File Upload | Multer |
+| Scheduler | node-cron |
+| HTTP Client | Axios |
 
 ---
 
@@ -83,8 +82,8 @@ cd LeafBid
 cd backend
 npm install
 cp .env.example .env
-# Edit .env and fill in your DATABASE_URL and PORT
-# Requires PostgreSQL database named 'leafbid'
+# Edit .env with your database credentials:
+# DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME, JWT_SECRET
 # Run schema.sql to initialize tables:
 psql -U your_user -d leafbid -f src/database/schema.sql
 ```
@@ -114,6 +113,7 @@ npm run dev
 ```
 
 ---
+
 ## Screenshots
 
 ### Authentication
