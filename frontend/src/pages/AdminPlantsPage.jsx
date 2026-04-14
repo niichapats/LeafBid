@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import Navbar from '../components/Navbar.jsx'
+import PageHeader from '../components/PageHeader.jsx'
 import api from '../utils/api.js'
 import { getUser } from '../utils/auth.js'
 
@@ -46,10 +47,7 @@ function AdminPlantsPage() {
       <Navbar />
       <div className="min-h-screen bg-stone-50 px-4 py-8">
         <div className="mx-auto max-w-5xl">
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold text-slate-900">Pending Plant Verification</h1>
-            <p className="mt-1 text-sm text-slate-600">Review and approve or reject seller plant listings</p>
-          </div>
+          <PageHeader title="Pending Plant Verification" subtitle="Review and approve or reject seller plant listings" />
 
         {error ? <p className="mb-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</p> : null}
 

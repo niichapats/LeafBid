@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar.jsx'
+import AuctionCard from '../components/AuctionCard.jsx'
+import PageHeader from '../components/PageHeader.jsx'
 import api from '../utils/api.js'
 import { getUser } from '../utils/auth.js'
 
@@ -8,7 +10,6 @@ function DashboardPage() {
   const navigate = useNavigate()
   const user = getUser()
   const [auctions, setAuctions] = useState([])
-  const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -21,13 +22,9 @@ function DashboardPage() {
       try {
         setLoading(true)
         setError('')
-        const [auctionsRes, profileRes] = await Promise.all([
-          api.get('/auctions'),
-          api.get('/profile')
-        ])
+        const auctionsRes = await api.get('/auctions')
         const activeAuctions = (auctionsRes.data || []).filter((auction) => auction.status === 'active')
         setAuctions(activeAuctions)
-        setProfile(profileRes.data)
       } catch (err) {
         setError(err.response?.data?.error || 'Failed to load data')
         console.error('Error fetching data:', err)
@@ -49,12 +46,7 @@ function DashboardPage() {
       
       <div className="px-4 py-8">
         <div className="mx-auto max-w-6xl">
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold text-slate-900">
-              Welcome back, {profile?.display_name || user.email}!
-            </h1>
-            <p className="mt-2 text-lg text-slate-600">Live Plant Auctions</p>
-          </div>
+          <PageHeader title="Active Auctions" containerClassName="mb-8" />
 
           {error ? (
             <div className="mb-6 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
@@ -71,34 +63,7 @@ function DashboardPage() {
           {!loading && auctions.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {auctions.map((auction) => (
-                <div
-                  key={auction.id}
-                  onClick={() => handleCardClick(auction.id)}
-                  className="overflow-hidden rounded-2xl border border-stone-200 bg-white text-slate-900 shadow-sm transition-shadow hover:shadow-md cursor-pointer"
-                >
-                  {auction.image_url ? (
-                    <img
-                      src={`http://localhost:3000${auction.image_url}`}
-                      alt={auction.plant_title || 'Plant'}
-                      className="w-full h-64 object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-64 bg-gray-200 flex items-center justify-center text-gray-400">
-                      No image
-                    </div>
-                  )}
-
-                  <div className="p-4">
-                    <h3 className="text-lg font-semibold text-slate-900 line-clamp-2">{auction.plant_title || 'Untitled Plant'}</h3>
-
-                    <div className="mt-3 space-y-2">
-                      <p className="text-xl font-bold text-emerald-700">฿{Number(auction.current_price).toLocaleString()}</p>
-                      <p className="text-sm text-slate-600">
-                        End time: {auction.end_time ? new Date(auction.end_time).toLocaleString() : '-'}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                <AuctionCard key={auction.id} auction={auction} onClick={handleCardClick} />
               ))}
             </div>
           ) : null}

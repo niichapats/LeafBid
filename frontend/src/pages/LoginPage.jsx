@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import PageHeader from '../components/PageHeader.jsx'
 import api from '../utils/api.js'
 import { saveToken } from '../utils/auth.js'
 
@@ -29,10 +30,12 @@ function LoginPage() {
   return (
     <div className="min-h-screen bg-stone-50 flex items-center justify-center px-4">
       <div className="w-full max-w-md rounded-3xl border border-stone-200 bg-white p-8 text-slate-900 shadow-sm transition-shadow hover:shadow-md">
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-slate-900">LeafBid</h1>
-          <p className="mt-2 text-sm text-slate-600">Sign in to continue bidding on rare plants</p>
-        </div>
+        <PageHeader
+          title="LeafBid"
+          subtitle="Sign in to continue bidding on rare plants"
+          containerClassName="mb-8 text-center"
+          subtitleClassName="mt-2 text-sm text-slate-600"
+        />
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>

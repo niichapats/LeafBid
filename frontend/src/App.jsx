@@ -6,7 +6,6 @@ import MyPlantsPage from './pages/MyPlantsPage.jsx'
 import CreateAuctionPage from './pages/CreateAuctionPage.jsx'
 import AdminPlantsPage from './pages/AdminPlantsPage.jsx'
 import AdminAuctionsPage from './pages/AdminAuctionsPage.jsx'
-import AuctionsPage from './pages/AuctionsPage.jsx'
 import BiddingRoomPage from './pages/BiddingRoomPage.jsx'
 import ProfilePage from './pages/ProfilePage.jsx'
 
@@ -23,7 +22,7 @@ function App() {
         <Route path="/create-auction" element={<CreateAuctionPage />} />
         <Route path="/admin/plants" element={<AdminPlantsPage />} />
         <Route path="/admin/auctions" element={<AdminAuctionsPage />} />
-        <Route path="/auctions" element={<AuctionsPage />} />
+        <Route path="/auctions" element={<Navigate to="/" replace />} />
         <Route path="/auctions/:id" element={<BiddingRoomPage />} />
       </Routes>
     </BrowserRouter>

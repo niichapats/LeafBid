@@ -13,28 +13,27 @@ function Navbar() {
   const getNavLinks = () => {
     if (!user) return []
 
-    const commonLinks = [{ label: 'Browse Auctions', href: '/auctions' }]
-
     if (user.role === 'buyer') {
-      return [...commonLinks, { label: 'Won Auctions', href: '/profile' }]
+      return []
     }
 
     if (user.role === 'seller') {
       return [
-        ...commonLinks,
-        { label: 'Plant Management', href: '/my-plants' },
+        { label: 'Browse Auctions', href: '/' },
+        { label: 'My Plants', href: '/my-plants' },
         { label: 'Auction Management', href: '/create-auction' },
       ]
     }
 
     if (user.role === 'admin') {
       return [
+        { label: 'Browse Auctions', href: '/' },
         { label: 'Manage Plants', href: '/admin/plants' },
         { label: 'Manage Auctions', href: '/admin/auctions' },
       ]
     }
 
-    return commonLinks
+    return []
   }
 
   const displayName = user?.displayName || user?.email || 'User'

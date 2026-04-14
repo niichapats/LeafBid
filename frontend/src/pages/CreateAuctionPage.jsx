@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar.jsx'
+import StatusBadge from '../components/StatusBadge.jsx'
+import PageHeader from '../components/PageHeader.jsx'
 import api from '../utils/api.js'
 import { getUser } from '../utils/auth.js'
 
@@ -204,10 +206,11 @@ function CreateAuctionPage() {
       <div className="min-h-screen bg-stone-50 px-4 py-8">
         <div className="mx-auto max-w-5xl">
           <div className="mb-6 flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-slate-900">Auction Management</h1>
-              <p className="mt-1 text-sm text-slate-600">Create and manage auctions for your approved plants</p>
-            </div>
+            <PageHeader
+              title="Auction Management"
+              subtitle="Create and manage auctions for your approved plants"
+              containerClassName=""
+            />
             <button
               onClick={() => setShowCreateForm((value) => !value)}
               className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-100"
@@ -326,13 +329,13 @@ function CreateAuctionPage() {
 
                       <div className="mt-2">
                         {auction.status === 'scheduled' ? (
-                          <span className="bg-amber-50 text-amber-700 border border-amber-200 rounded-full px-3 py-1 text-sm">Scheduled</span>
+                          <StatusBadge status={auction.status} />
                         ) : null}
                         {auction.status === 'active' ? (
-                          <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full px-3 py-1 text-sm">Active</span>
+                          <StatusBadge status={auction.status} />
                         ) : null}
                         {auction.status === 'ended' ? (
-                          <span className="bg-slate-50 text-slate-600 border border-slate-200 rounded-full px-3 py-1 text-sm">Ended</span>
+                          <StatusBadge status={auction.status} />
                         ) : null}
                       </div>
 

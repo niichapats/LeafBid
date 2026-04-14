@@ -2,6 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 import { io } from 'socket.io-client'
 import Navbar from '../components/Navbar.jsx'
+import PageHeader from '../components/PageHeader.jsx'
+import BidHistoryList from '../components/BidHistoryList.jsx'
 import api from '../utils/api.js'
 import { getToken, getUser, isLoggedIn } from '../utils/auth.js'
 
@@ -141,10 +143,7 @@ function BiddingRoomPage() {
       <Navbar />
       <div className="min-h-screen bg-stone-50 px-4 py-8">
         <div className="mx-auto max-w-5xl">
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold text-slate-900">Bidding Room</h1>
-            <p className="mt-1 text-sm text-slate-600">Real-time bidding for auction #{auctionId}</p>
-          </div>
+          <PageHeader title="Bidding Room" subtitle={`Real-time bidding for auction #${auctionId}`} />
 
         {error ? <p className="mb-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</p> : null}
 
@@ -253,20 +252,7 @@ function BiddingRoomPage() {
 
           {bidHistory.length === 0 ? <p className="text-slate-500">No bids yet.</p> : null}
 
-          <div className="space-y-3">
-            {bidHistory.map((bid, index) => (
-              <div key={`${bid.placed_at || bid.placedAt}-${index}`} className="rounded-xl border border-stone-200 bg-stone-50 p-3 text-slate-900 shadow-sm transition-shadow hover:shadow-md">
-                <p className="text-sm font-semibold text-slate-900">Amount: {bid.amount}</p>
-                <p className="text-xs text-slate-600">Buyer: {bid.buyerEmail}</p>
-                <p className="text-xs text-slate-500">
-                  {(() => {
-                    const time = bid.placed_at || bid.placedAt
-                    return `Placed at: ${time ? new Date(time).toLocaleString() : '-'}`
-                  })()}
-                </p>
-              </div>
-            ))}
-          </div>
+          <BidHistoryList bids={bidHistory} />
         </div>
       </div>
     </div>

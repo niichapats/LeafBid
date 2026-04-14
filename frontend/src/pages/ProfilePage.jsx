@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import Navbar from '../components/Navbar.jsx'
+import PageHeader from '../components/PageHeader.jsx'
 import api from '../utils/api.js'
 import { getUser } from '../utils/auth.js'
 
@@ -100,10 +101,7 @@ function ProfilePage() {
       <Navbar />
       <div className="min-h-screen bg-stone-50 px-4 py-8">
         <div className="mx-auto max-w-3xl">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-slate-900">My Profile</h1>
-            <p className="mt-1 text-sm text-slate-600">Manage your account information</p>
-          </div>
+          <PageHeader title="My Profile" subtitle="Manage your account information" containerClassName="mb-8" />
 
         {error ? <p className="mb-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</p> : null}
         {success ? <p className="mb-4 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{success}</p> : null}

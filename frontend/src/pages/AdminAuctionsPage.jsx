@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import Navbar from '../components/Navbar.jsx'
+import StatusBadge from '../components/StatusBadge.jsx'
+import PageHeader from '../components/PageHeader.jsx'
 import api from '../utils/api.js'
 import { getUser } from '../utils/auth.js'
 
@@ -66,10 +68,7 @@ function AdminAuctionsPage() {
       <Navbar />
       <div className="min-h-screen bg-stone-50 px-4 py-8">
         <div className="mx-auto max-w-5xl">
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold text-slate-900">Manage Auctions</h1>
-            <p className="mt-1 text-sm text-slate-600">Admin tools for ending and deleting auctions</p>
-          </div>
+          <PageHeader title="Manage Auctions" subtitle="Admin tools for ending and deleting auctions" />
 
         {error ? <p className="mb-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</p> : null}
         {success ? <p className="mb-4 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{success}</p> : null}
@@ -100,13 +99,13 @@ function AdminAuctionsPage() {
 
                       <div className="mt-2">
                         {auction.status === 'scheduled' ? (
-                          <span className="bg-amber-50 text-amber-700 border border-amber-200 rounded-full px-3 py-1 text-sm">Scheduled</span>
+                          <StatusBadge status={auction.status} />
                         ) : null}
                         {auction.status === 'active' ? (
-                          <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full px-3 py-1 text-sm">Active</span>
+                          <StatusBadge status={auction.status} />
                         ) : null}
                         {auction.status === 'ended' ? (
-                          <span className="bg-slate-50 text-slate-600 border border-slate-200 rounded-full px-3 py-1 text-sm">Ended</span>
+                          <StatusBadge status={auction.status} />
                         ) : null}
                       </div>
 
