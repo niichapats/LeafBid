@@ -51,8 +51,8 @@ function Navbar() {
     if (user.role === 'seller') {
       return [
         { label: 'Browse Auctions', href: '/' },
-        { label: 'My Plants', href: '/my-plants' },
-        { label: 'Auction Management', href: '/create-auction' },
+        { label: 'Manage Plants', href: '/my-plants' },
+        { label: 'Manage Auctions', href: '/create-auction' },
       ]
     }
 
