@@ -3,6 +3,7 @@ dotenv.config()
 
 import express from 'express'
 import cors from 'cors'
+import rateLimit from 'express-rate-limit'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
 import fs from 'fs'
@@ -25,12 +26,18 @@ fs.mkdirSync(uploadsPath, { recursive: true })
 const app = express()
 const httpServer = createServer(app)
 const io = new Server(httpServer, { cors: { origin: '*' } })
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  message: { error: 'Too many requests, please try again later' },
+})
 
 initSocket(io)
 
 app.use(cors({ origin: 'http://localhost:5173', credentials: true }))
 app.use(express.json())
 app.use('/uploads', express.static(uploadsPath))
+app.use('/api/auth', authLimiter)
 app.use('/api/auth', authRoutes)
 app.use('/api/plants', plantRoutes)
 app.use('/api/auctions', auctionRoutes)
