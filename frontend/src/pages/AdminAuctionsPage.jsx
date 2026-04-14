@@ -39,7 +39,7 @@ function AdminAuctionsPage() {
       setError('')
       setSuccess('')
       await api.patch(`/auctions/${auctionId}/end`)
-      setSuccess(`Auction ${auctionId} ended`)
+      setSuccess('Auction ended')
       await loadAuctions()
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to end auction')
@@ -56,7 +56,7 @@ function AdminAuctionsPage() {
       setError('')
       setSuccess('')
       await api.delete(`/auctions/${auctionId}`)
-      setSuccess(`Auction ${auctionId} deleted`)
+      setSuccess('Auction deleted')
       await loadAuctions()
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to delete auction')

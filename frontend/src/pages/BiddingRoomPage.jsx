@@ -143,7 +143,7 @@ function BiddingRoomPage() {
       <Navbar />
       <div className="min-h-screen bg-stone-50 px-4 py-8">
         <div className="mx-auto max-w-5xl">
-          <PageHeader title="Bidding Room" subtitle={`Real-time bidding for auction #${auctionId}`} />
+          <PageHeader title="Bidding Room" subtitle="Real-time bidding" />
 
         {error ? <p className="mb-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</p> : null}
 
